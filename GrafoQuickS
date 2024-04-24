@@ -51,7 +51,6 @@ def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
         count += 1
     duration = time.monotonic() - start
     return duration/count
-    print(tmin)
 
 # Test
 if __name__=="__main__":
