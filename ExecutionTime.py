@@ -1,87 +1,68 @@
-# Programma per la stima dei tempi di esecuzione
-# ! time.perf_counter() al posto di time.monotonic()
 import time
 import random
 import math
+import matplotlib.pyplot as plt
+import QuickSelect
+import HeapSelect
+import MedianOfMedians
 
+def genera_input(n, maxv):
+    a = [0] * n
+    for i in range(n):
+        a[i] = random.randint(0, maxv)
+    return a
 
-def randomized_quickselect(a, i):
-  return randomized_select(a, 0, len(a) - 1, i)
-
-def randomized_select(a, p, r, i):
-  if p == r:
-    return a[p]
-  else:
-    q = randomized_partition(a, p, r)
-    k = q - p + 1
-    if i == k:
-      return a[q]
-    elif i < k:
-      return randomized_select(a, p, q - 1, i)
-    else:
-      return randomized_select(a, q + 1, r, i - k)
-
-def partition(a, low, high):
-  p = a[high]
-  i = low - 1
-  for j in range(low, high):
-    if a[j] <= p:
-      i = i + 1
-      a[i], a[j] = a[j], a[i]
-  a[i + 1], a[high] = a[high], a[i + 1]
-  return i + 1
-
-def randomized_partition(a, low, high):
-  i = random.randint(low, high - 1)
-  a[high - 1], a[i] = a[i], a[high - 1]
-  return partition(a, low, high)
-
-
-# Funzione per generare input casuale
-def genera_random_array(n):
-  return [random.randint(1, 10000) for i in range(n)]
-
-
-# Funzione per misurare il tempo di esecuzione
 def resolution():
-  start = time.monotonic()
-  while time.monotonic() == start:
-    pass
-  stop = time.monotonic()
-  return stop - start
+    start = time.perf_counter()
+    while time.perf_counter() == start:
+        pass
+    stop = time.perf_counter()
+    return stop - start
 
-
-# Funzione per misurare il tempo di esecuzione di quickselect
-def misura_tempo_di_esecuzione(input_array, k):
-  start_time = time.monotonic()
-  quicksort_select(input_array, k)
-  end_time = time.monotonic()
-  return end_time - start_time
-
-# Dimensioni dell'input da testare
-grandezza_array = [100, 1000, 100000]
-
-# Numero di iterazioni per ogni dimensione dell'input
-precisione = 50
-
-# Risoluzione del clock di sistema
-risoluzione = resolution()
+def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
+    tmin = risoluzione * ( 1 + ( 1 / max_rel_error ) )
+    count = 0
+    start = time.perf_counter()
+    while (time.perf_counter() - start) < tmin:
+        a = genera_input(n, maxv)
+        if len(a) > 0:  # Check if array is empty
+            k = random.randint(1, n)
+            func(a, k)
+        count += 1
+    duration = time.perf_counter() - start
+    return duration/count
 
 # Test
-for dimensione in grandezza_array:
-  tempo_totale = 0
-  for _ in range(precisione):
-    input_array = genera_random_array(dimensione)
-    k = random.randint(1, dimensione)
-    tempo_totale += misura_tempo_di_esecuzione(input_array, k)
-  tempo_medio = tempo_totale / precisione
-  print(
-      f"Dimensione dell'input: {dimensione}, Tempo medio di esecuzione di quicksort_select: {tempo_medio:.6f} secondi"
-  )
-  print(f"Risoluzione del clock di sistema: {risoluzione:.9f} secondi")
+if __name__=="__main__":
+    risoluzione = resolution()
+    nmin = 100
+    nmax = 100000
+    iters = 100      # quante volte genera un array di tale dim, migliora la precisione
+    base = 2 ** ( (math.log(nmax) - math.log(nmin)) / (iters-1) )
 
-# NEW
-nmin = 100
-a = nmin
-b = 2 ** ( math.log(max) - math.log(min) ) / (iters - 1)
-n = int(a * (b ** i))
+    points = [(None, None, None, None, None)] * iters
+
+    for i in range(iters):
+        print(f"\r{i}",end='')
+        # n = i * 100 #prof version
+        n = int(nmin * (base ** i))
+        points[i] = (n, benchmark(n, 100, QuickSelect.randomized_quickselect, risoluzione, 0.001)
+                        benchmark(n, 100, QuickSelect.quickselect, risoluzione, 0.001)
+                        benchmark(n, 100, HeapSelect.heapselect, risoluzione, 0.001)
+                        benchmark(n, 100, MedianOfMedians.median_of_medians_select, risoluzione, 0.001))
+
+# Plot
+xs, ys1, ys2, ys3, ys4 = zip(*points)
+plt.scatter(xs, ys1)
+plt.scatter(xs, ys2)
+plt.scatter(xs, ys3)
+plt.scatter(xs, ys4)
+#plt.plot(dimensioni_input, tempi_medi, marker='o', linestyle='-')
+#plt.xscale('log')
+#plt.yscale('log')
+plt.xlabel('Dimensione dell\'input (n)')
+plt.ylabel('Tempo medio di esecuzione (secondi)')
+plt.title('Tempo medio di esecuzione di QuickSort Select')
+plt.grid(True)
+plt.show() 
+plt.close()
