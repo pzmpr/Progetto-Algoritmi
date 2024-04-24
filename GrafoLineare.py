@@ -2,32 +2,36 @@ import time
 import random
 import matplotlib.pyplot as plt
 
+def randomized_quickselect(a, i):
+  return randomized_select(a, 0, len(a)-1, i)
+
+def randomized_select(a, p, r, i):
+  if p == r:
+    return a[p]
+  else:
+    q = randomized_partition(a, p, r)
+    k = q - p + 1
+    if i == k:
+      return a[q]
+    elif i < k:
+      return randomized_select(a, p, q-1, i)
+    else:
+      return randomized_select(a, q+1, r, i-k)
+
 def partition(a, low, high):
-  p = a[high - 1]
-  i = low
-  for j in range(low, high-1):
-      if a[j] <= p:
-          a[i], a[j] = a[j], a[i]
-          i += 1
-  a[i], a[high-1] = a[high-1], a[i]
-  return i
-
-def quicksort(a, low, high):
-  if high - low <= 1:
-      return
-  middle = partition(a, low, high)
-  quicksort(a, low, middle)
-  quicksort(a, middle+1, high)
-
-#def quicksort_select(a, k): # originale
-  #assert k <= len(a)
-  #quicksort(a, 0, len(a))
-  #return a[k-1]
-
-def quicksort_select(a, k): #fa piu veloce
-    assert k <= len(a)
-    sorted_array = sorted(a)
-    return sorted_array[k-1]
+  p = a[high]
+  i = low - 1
+  for j in range(low, high):
+    if a[j] <= p:
+      i = i + 1
+      a[i], a[j] = a[j], a[i]
+  a[i+1], a[high] = a[high], a[i+1] 
+  return i + 1
+  
+def randomized_partition(a, low, high):
+  i = random.randint(low, high-1)
+  a[high-1], a[i] = a[i], a[high-1]
+  return partition(a, low, high)
 
 #--------------------------------------------------------------------
 
