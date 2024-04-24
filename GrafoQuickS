@@ -24,7 +24,7 @@ def quicksort_select(a, k):
     quicksort(a, 0, len(a)-1)
     return a[k - 1]
 
-#----
+#---- AAAAAAAAAAAAAAAAAAAAAA
 
 def genera_input(n, maxv):
     a = [0] * n
