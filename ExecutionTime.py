@@ -2,6 +2,7 @@
 # ! time.perf_counter() al posto di time.monotonic()
 import time
 import random
+import math
 
 
 def randomized_quickselect(a, i):
@@ -57,11 +58,6 @@ def misura_tempo_di_esecuzione(input_array, k):
   end_time = time.monotonic()
   return end_time - start_time
 
-# 
-#
-#
-#
-
 # Dimensioni dell'input da testare
 grandezza_array = [100, 1000, 100000]
 
@@ -83,3 +79,9 @@ for dimensione in grandezza_array:
       f"Dimensione dell'input: {dimensione}, Tempo medio di esecuzione di quicksort_select: {tempo_medio:.6f} secondi"
   )
   print(f"Risoluzione del clock di sistema: {risoluzione:.9f} secondi")
+
+# NEW
+nmin = 100
+a = nmin
+b = 2 ** ( math.log(max) - math.log(min) ) / (iters - 1)
+n = int(a * (b ** i))
