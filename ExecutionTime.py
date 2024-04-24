@@ -6,12 +6,14 @@ import QuickSelect
 import HeapSelect
 import MedianOfMedians
 
+# genera array di dimensione n con interi compresi nell'intervallo [0, maxv] 
 def genera_input(n, maxv):
     a = [0] * n
     for i in range(n):
         a[i] = random.randint(0, maxv)
     return a
 
+# calcola la risoluzione del clock
 def resolution():
     start = time.perf_counter()
     while time.perf_counter() == start:
@@ -19,6 +21,11 @@ def resolution():
     stop = time.perf_counter()
     return stop - start
 
+# n dimensione degli array
+# maxv massimo valore degli elementi
+# func funzione
+# risoluzione del clock
+# RETURN: tempo medio dell'esecuzione per una singola istanza 
 def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
     tmin = risoluzione * ( 1 + ( 1 / max_rel_error ) )
     count = 0
@@ -46,10 +53,10 @@ if __name__=="__main__":
         print(f"\r{i}",end='')
         # n = i * 100 #prof version
         n = int(nmin * (base ** i))
-        points[i] = (n, benchmark(n, 100, QuickSelect.randomized_quickselect, risoluzione, 0.001)
-                        benchmark(n, 100, QuickSelect.quickselect, risoluzione, 0.001)
-                        benchmark(n, 100, HeapSelect.heapselect, risoluzione, 0.001)
-                        benchmark(n, 100, MedianOfMedians.median_of_medians_select, risoluzione, 0.001))
+        points[i] = (n, benchmark(n, n, QuickSelect.randomized_quickselect, risoluzione, 0.001),
+                        benchmark(n, n, QuickSelect.quickselect, risoluzione, 0.001),
+                        benchmark(n, n, HeapSelect.heapselect, risoluzione, 0.001),
+                        benchmark(n, n, MedianOfMedians.median_of_medians_select, risoluzione, 0.001))
 
 # Plot
 xs, ys1, ys2, ys3, ys4 = zip(*points)
@@ -62,7 +69,7 @@ plt.scatter(xs, ys4)
 #plt.yscale('log')
 plt.xlabel('Dimensione dell\'input (n)')
 plt.ylabel('Tempo medio di esecuzione (secondi)')
-plt.title('Tempo medio di esecuzione di QuickSort Select')
+plt.title('Tempi medi di esecuzione')
 plt.grid(True)
 plt.show() 
 plt.close()
