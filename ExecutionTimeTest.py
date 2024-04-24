@@ -64,7 +64,7 @@ if __name__=="__main__":
 xs, ys1, ys2 =zip(*points)
 nxs=np.array(xs)
 
-plt.subplot(7, 1, 1)
+plt.subplot(3, 1, 1)
 plt.plot(xs, ys1)
 plt.title("Tempo di esecuzione Randomized QuickSelect")
 # plt.scatter(xs, ys1)
@@ -72,9 +72,12 @@ a1, b1 = np.polyfit(nxs, ys1, 1)
 plt.plot(xs, a1*nxs+b1)
 plt.xlabel('Dimensione dell\'input (n)')
 plt.ylabel('Tempo medio di esecuzione (secondi)')
+plt.xscale('log')
+plt.yscale('log')
 plt.grid(True)
 
-plt.subplot(7, 1, 3)
+
+plt.subplot(3, 1, 3)
 plt.title("Tempo di esecuzione QuickSelect")
 plt.plot(nxs, ys2)
 # plt.scatter(xs, ys2)
@@ -82,6 +85,8 @@ a2, b2 = np.polyfit(xs, ys2, 1)
 plt.plot(xs, a2*nxs+b2)
 plt.xlabel('Dimensione dell\'input (n)')
 plt.ylabel('Tempo medio di esecuzione (secondi)')
+plt.xscale('log')
+plt.yscale('log')
 plt.grid(True)
 
 '''
@@ -110,5 +115,3 @@ plt.show()
 plt.close()
 
 # Scala logaritmica
-# plt.xscale('log')
-# plt.yscale('log')
