@@ -1,0 +1,83 @@
+import time
+import random
+import math
+import matplotlib.pyplot as plt
+
+def partition(a, low, high):
+    p = a[high - 1]
+    i = low
+    for j in range(low, high - 1):
+        if a[j] <= p:
+            a[i], a[j] = a[j], a[i]
+            i += 1
+    a[i], a[high - 1] = a[high - 1], a[i]
+    return i
+
+def quicksort(a, low, high):
+    if low < high - 1:
+        middle = partition(a, low, high)
+        quicksort(a, low, middle)
+        quicksort(a, middle + 1, high)
+
+def quicksort_select(a, k):
+    assert k <= len(a)
+    quicksort(a, 0, len(a)-1)
+    return a[k - 1]
+
+#----
+
+def genera_input(n, maxv):
+    a = [0] * n
+    for i in range(n):
+        a[i] = random.randint(0, maxv)
+    return a
+
+def resolution():
+    start = time.monotonic()
+    while time.monotonic() == start:
+        pass
+    stop = time.monotonic()
+    return stop - start
+
+def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
+    tmin = risoluzione * ( 1 + ( 1 / max_rel_error ) )
+    count = 0
+    start = time.monotonic()
+    while (time.monotonic() - start) < tmin:
+        a = genera_input(n, maxv)
+        if len(a) > 0:  # Check if array is empty
+            k = random.randint(1, n)
+            func(a, k)
+        count += 1
+    duration = time.monotonic() - start
+    return duration/count
+    print(tmin)
+
+# Test
+if __name__=="__main__":
+    risoluzione = resolution()
+    nmin = 100
+    nmax = 100000
+    iters = 100      # quante volte genera un array di tale dim, migliora la precisione
+    base = 2 ** ( (math.log(nmax) - math.log(nmin)) / (iters-1) )
+
+    points = [(None, None, None, None, None)] * iters
+
+    for i in range(iters):
+        print(f"\r{i}",end='')
+        n = i * 100 #prof version
+        #n = int(nmin * (base ** i))
+        points[i] = (n, benchmark(n, 100, quicksort_select, risoluzione, 0.001))
+
+# Plot
+xs, ys = zip(*points)
+plt.scatter(xs, ys)
+#plt.plot(dimensioni_input, tempi_medi, marker='o', linestyle='-')
+#plt.xscale('log')
+#plt.yscale('log')
+plt.xlabel('Dimensione dell\'input (n)')
+plt.ylabel('Tempo medio di esecuzione (secondi)')
+plt.title('Tempo medio di esecuzione di QuickSort Select')
+plt.grid(True)
+plt.show() 
+plt.close()
