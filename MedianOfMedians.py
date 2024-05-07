@@ -50,18 +50,6 @@ def array_bubble_sort(a, j, g):
          if a[j+k*g] > a[j+(k+1)*g]:
             a[j+k*g], a[j+(k+1)*g] = a[j+(k+1)*g], a[j+k*g]
 
-'''
-# a array di interi
-# p inizio dell'array
-# r fine dell'array
-# esegue bubblesort su 
-def medians_bubble_sort(a, p, r):
-  for i in range(p, r-1):
-    for k in range(p, r-1):
-      if a[k] > a[k+1]:
-        a[k], a[k+1] = a[k+1], a[k]
-'''
-
 # a array di interi
 # p inizio dell'array
 # r fine dell'array
