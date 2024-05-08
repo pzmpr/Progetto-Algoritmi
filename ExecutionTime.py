@@ -419,10 +419,10 @@ if __name__=="__main__":
         print(f"\r{i}",end='')
         # n = i * 100 #prof version
         n = int(nmin * (base ** i))
-        points[i] = (n, benchmark(n, 5*n, randomized_quickselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, quickselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, heapselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, median_of_medians_select, risoluzione, 0.001))
+        points[i] = (n, benchmark(n, n, randomized_quickselect, risoluzione, 0.001),
+                        benchmark(n, n, quickselect, risoluzione, 0.001),
+                        benchmark(n, n, heapselect, risoluzione, 0.001),
+                        benchmark(n, n, median_of_medians_select, risoluzione, 0.001))
 
 # Plot (line of best fit)
 xs, ys1, ys2, ys3, ys4 = zip(*points)
@@ -457,8 +457,9 @@ ax2.grid(True)
 fig3, ax3 = plt.subplots()
 fig3.suptitle("Tempo di esecuzione HeapSelect")
 plt.scatter(xs, ys3)
-a3, b3 = np.polyfit(xs, ys3, 1)
-ax3.plot(xs, a3*nxs+b3, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
+coeff3 = np.polyfit(np.log(xs)*xs,ys4,1)
+fit3 = np.poly1d(coeff3)
+ax3.plot(xs, fit3(xs+np.log(xs)*xs), color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n+klogk)
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax3.grid(True)
 
@@ -467,8 +468,7 @@ fig4, ax4 = plt.subplots()
 fig4.suptitle("Tempo di esecuzione MedianOfMediansSelect")
 plt.scatter(xs, ys4)
 a4, b4 = np.polyfit(xs, ys4, 1)
-# TODO: Line of best fit nlogn
-# ax4.plot(xs, a4*nxs*(math.log(nxs))+b4, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(nlogn)
+ax4.plot(xs, a4*nxs+b4, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax4.grid(True)
 
