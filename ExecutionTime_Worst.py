@@ -9,7 +9,7 @@ sys.setrecursionlimit(15000)
 
 # ^ QUICKSELECT ^ #
 
-# a arra
+# a array
 # p indice di inizio array
 # r indice di fine array
 # i indice dell'elemento da trovare
