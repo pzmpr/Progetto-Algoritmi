@@ -3,7 +3,9 @@ import random
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
+sys.setrecursionlimit(15000)
 
 # ^ QUICKSELECT ^ #
 
@@ -376,7 +378,7 @@ def partition(a, p, r):
 def genera_input(n, maxv):
     a = [0] * n
     for i in range(n):
-        a[i] = random.randint(0, maxv)
+        a[i] = i
     return a
 
 # calcola la risoluzione del clock
@@ -399,7 +401,7 @@ def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
     while (time.perf_counter() - start) < tmin:
         a = genera_input(n, maxv)
         if len(a) > 0:  # Check if array is empty
-            k = random.randint(1, n)
+            k = 1
             func(a, k)
         count += 1
     duration = time.perf_counter() - start
@@ -419,25 +421,24 @@ if __name__=="__main__":
         print(f"\r{i}",end='')
         # n = i * 100 #prof version
         n = int(nmin * (base ** i))
-        points[i] = (n, benchmark(n, 5*n, randomized_quickselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, quickselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, heapselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, median_of_medians_select, risoluzione, 0.001))
+        points[i] = (n, benchmark(n//4, n//4, randomized_quickselect, risoluzione, 0.001),
+                        benchmark(n//4, n//4, quickselect, risoluzione, 0.001),
+                        benchmark(n, n, heapselect, risoluzione, 0.001),
+                        benchmark(n, n, median_of_medians_select, risoluzione, 0.001))
 
 # Plot (line of best fit)
 xs, ys1, ys2, ys3, ys4 = zip(*points)
 nxs = np.array(xs)
 
-# CASO MEDIO
+# CASO PEGGIORE
 
 # Randondimized Quickselect
 fig1, ax1 = plt.subplots()
 fig1.suptitle("Tempo di esecuzione Randomized QuickSelect")
 plt.scatter(xs, ys1)
-a1, b1 = np.polyfit(xs, ys1, 1)
 coeff1 = np.polyfit(xs, ys1, 2)
 fit1 = np.poly1d(coeff1)
-ax1.plot(xs, a1*nxs+b1, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
+ax1.plot(xs, fit1(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)')       # Th(n^2)
 ax1.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax1.grid(True)
 ax1.legend()
@@ -449,7 +450,7 @@ plt.scatter(xs, ys2)
 a2, b2 = np.polyfit(xs, ys2, 1)
 coeff2 = np.polyfit(xs, ys2, 2)
 fit2 = np.poly1d(coeff2)
-ax2.plot(xs, a2*nxs+b2, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
+ax2.plot(xs, fit2(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)')       # Th(n^2)
 ax2.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax2.grid(True)
 
@@ -457,8 +458,9 @@ ax2.grid(True)
 fig3, ax3 = plt.subplots()
 fig3.suptitle("Tempo di esecuzione HeapSelect")
 plt.scatter(xs, ys3)
-a3, b3 = np.polyfit(xs, ys3, 1)
-ax3.plot(xs, a3*nxs+b3, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
+coeff3 = np.polyfit(np.log(xs)*xs,ys4,1)
+fit3 = np.poly1d(coeff3)
+ax3.plot(xs, fit3(np.log(xs)*xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n+klogk)
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax3.grid(True)
 
@@ -466,9 +468,8 @@ ax3.grid(True)
 fig4, ax4 = plt.subplots()
 fig4.suptitle("Tempo di esecuzione MedianOfMediansSelect")
 plt.scatter(xs, ys4)
-a4, b4 = np.polyfit(xs, ys4, 1)
-# TODO: Line of best fit nlogn
-# ax4.plot(xs, a4*nxs*(math.log(nxs))+b4, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(nlogn)
+a4, b4 = np.polyfit(xs, ys3, 1)
+ax4.plot(xs, a4*nxs+b4, color='red', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax4.grid(True)
 
@@ -485,12 +486,10 @@ plt.scatter(xs, ys4, color='orange', label='MedianodMediansSelect', alpha=0.50)
 ax5.plot(xs, ys4, color='orange', linestyle='-', linewidth=2.5, alpha=0.50)
 ax5.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax5.grid(True)
-plt.xscale('log')
-plt.yscale('log')
+# plt.xscale('log')
+# plt.yscale('log')
 ax5.legend()
 
-# CASO PEGGIORE
-#ax1.plot(xs, fit1(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)')       # Th(n^2)
 
 plt.show()
 plt.close()
