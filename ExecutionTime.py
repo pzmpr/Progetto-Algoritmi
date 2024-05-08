@@ -290,8 +290,8 @@ class MinheapAux:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.pos[i], self.pos[p] = self.pos[p], self.pos[i]
           self.moveup(p)
-         
-          
+
+
 # ^ MEDIANOFMEDIANS ^ #
 
 # a array di interi
@@ -304,7 +304,7 @@ def median_of_medians_select(a, i):
 # r fine dell'array
 # i indice dell'elemento da trovare
 def select2(a,p,r,i):
-  
+
   while (r-p+1) % 5 != 0:     # ripeto finche' non ho un numero di elementi multiplo di 5
     if r - p != 0:
       for j in range(p, r+1): # metto il minimo in prima posizione
@@ -314,7 +314,7 @@ def select2(a,p,r,i):
       return a[p]
     p = p + 1                 # se i != 1 lavoro sul resto dell'array
     i = i - 1
-             
+
   g = int((r - p + 1) / 5)              # numero dei gruppi da 5 elementi (e' un intero)
   if g == 1:
     array_bubble_sort(a, p, g)
@@ -428,29 +428,32 @@ if __name__=="__main__":
 xs, ys1, ys2, ys3, ys4 = zip(*points)
 nxs = np.array(xs)
 
+# CASO MEDIO
+
+# Randondimized Quickselect
 fig1, ax1 = plt.subplots()
 fig1.suptitle("Tempo di esecuzione Randomized QuickSelect")
 plt.scatter(xs, ys1)
 a1, b1 = np.polyfit(xs, ys1, 1)
 coeff1 = np.polyfit(xs, ys1, 2)
 fit1 = np.poly1d(coeff1)
-ax1.plot(xs, fit1(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)')       # Th(n^2)
 ax1.plot(xs, a1*nxs+b1, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax1.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax1.grid(True)
 ax1.legend()
 
+# Quickselect
 fig2, ax2 = plt.subplots()
 fig2.suptitle("Tempo di esecuzione QuickSelect")
 plt.scatter(xs, ys2)
 a2, b2 = np.polyfit(xs, ys2, 1)
 coeff2 = np.polyfit(xs, ys2, 2)
 fit2 = np.poly1d(coeff2)
-ax2.plot(xs, fit2(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)')       # Th(n^2)
 ax2.plot(xs, a2*nxs+b2, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax2.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax2.grid(True)
 
+# Heapselect
 fig3, ax3 = plt.subplots()
 fig3.suptitle("Tempo di esecuzione HeapSelect")
 plt.scatter(xs, ys3)
@@ -459,13 +462,35 @@ ax3.plot(xs, a3*nxs+b3, color='orange', linestyle='dashed', linewidth=2.5, label
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax3.grid(True)
 
+# Median of medians select 
 fig4, ax4 = plt.subplots()
 fig4.suptitle("Tempo di esecuzione MedianOfMediansSelect")
 plt.scatter(xs, ys4)
 a4, b4 = np.polyfit(xs, ys4, 1)
-ax4.plot(xs, a4*nxs+b4, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(nlogn)
+# TODO: Line of best fit nlogn
+# ax4.plot(xs, a4*nxs*(math.log(nxs))+b4, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(nlogn)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax4.grid(True)
+
+# GRAFICO COMPLETO
+fig5, ax5 = plt.subplots()
+fig5.suptitle("Grafico di comparazione")
+plt.scatter(xs, ys1, color='green', label='Randomized QuickSelect', alpha=0.50)
+ax5.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50)
+plt.scatter(xs, ys2, color='blue', label='QuickSelect', alpha=0.50)
+ax5.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50)
+plt.scatter(xs, ys3, color='red', label='HeapSelect', alpha=0.50)
+ax5.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50)
+plt.scatter(xs, ys4, color='orange', label='MedianodMediansSelect', alpha=0.50)
+ax5.plot(xs, ys4, color='orange', linestyle='-', linewidth=2.5, alpha=0.50)
+ax5.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax5.grid(True)
+plt.xscale('log')
+plt.yscale('log')
+ax5.legend()
+
+# CASO PEGGIORE
+#ax1.plot(xs, fit1(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)')       # Th(n^2)
 
 plt.show()
 plt.close()
