@@ -5,7 +5,6 @@
 # p indice di inizio array
 # r indice di fine array
 # k indice dell'elemento da trovare
-
 def heap_select(a, k):
   main_heap = Minheap()
   main_heap.buildheap(a)
@@ -59,7 +58,7 @@ class Minheap:
           return None
       return j
 
-  # i indice di un nofo
+  # i indice di un nodo
   # REUTRN: indice del figlio destro
   def right(self, i):
       j = i * 2 + 2
@@ -99,7 +98,7 @@ class Minheap:
           self.heapify(i)
 
   # i indice del nodo da cui parte la procedura
-  # "sistema" l'albero in modo che il sottoalbero con randice il
+  # "sistema" l'albero in modo che il sottoalbero con radice il
   # nodo in posizione i sia una minheap
   def heapify(self, i):
       l = self.left(i)
@@ -158,7 +157,7 @@ class MinheapAux:
           return None
       return j
 
-  # i indice di un nofo
+  # i indice di un nodo
   # REUTRN: indice del figlio destro
   def right(self, i):
       j = i * 2 + 2
