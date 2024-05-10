@@ -127,7 +127,7 @@ class Minheap:
 class MinheapAux:
 
   #   heap: array di interi che rappresentano i valori dei nodi
-  #   ??? pos: array di interi che rappresentano le posizioni dei nodi
+  #   pos: array di interi che rappresentano le posizioni dei nodi
   def __init__(self):
       self.heap = []
       self.pos = []
