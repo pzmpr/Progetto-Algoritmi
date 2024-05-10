@@ -10,7 +10,6 @@ import random
 # p indice di inizio array
 # r indice di fine array
 # i indice dell'elemento da trovare
-
 def quickselect(a, i):
   return select(a, 0, len(a)-1, i)
   
