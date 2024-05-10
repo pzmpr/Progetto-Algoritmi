@@ -657,7 +657,6 @@ if __name__=="__main__":
 
     for i in range(iters):
         print(f"\r{i}",end='')
-        # n = i * 100 #prof version
         n = int(nmin * (base ** i))
         points[i] = (n, benchmark(n, n, randomized_quickselect, risoluzione, 0.001),
                         benchmark(n, n, quickselect, risoluzione, 0.001),
@@ -665,34 +664,31 @@ if __name__=="__main__":
                         benchmark(n, n, minmax_heapselect, risoluzione, 0.001),
                         benchmark(n, n, medianofmedians_select, risoluzione, 0.001))
 
-# Plot (line of best fit)
+# Plot
 xs, ys1, ys2, ys3, ys4, ys5 = zip(*points)
 nxs = np.array(xs)
 
-# CASO MEDIO
+# TEMPI DI ESECUZIONE NEL CASO MEDIO
 
 # Randondimized Quickselect
 fig1, ax1 = plt.subplots()
 fig1.suptitle("Tempo di esecuzione Randomized QuickSelect")
 plt.scatter(xs, ys1)
 a1, b1 = np.polyfit(xs, ys1, 1)
-coeff1 = np.polyfit(xs, ys1, 2)
-fit1 = np.poly1d(coeff1)
 ax1.plot(xs, a1*nxs+b1, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax1.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax1.grid(True)
-ax1.legend()
+ax1.legend(loc='upper left')
 
 # Quickselect
 fig2, ax2 = plt.subplots()
 fig2.suptitle("Tempo di esecuzione QuickSelect")
 plt.scatter(xs, ys2)
 a2, b2 = np.polyfit(xs, ys2, 1)
-coeff2 = np.polyfit(xs, ys2, 2)
-fit2 = np.poly1d(coeff2)
 ax2.plot(xs, a2*nxs+b2, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax2.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax2.grid(True)
+ax2.legend(loc='upper left')
 
 # Heapselect
 fig3, ax3 = plt.subplots()
@@ -703,6 +699,7 @@ fit3 = np.poly1d(coeff3)
 ax3.plot(xs, fit3(xs+np.log(xs)*xs), color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n+klogk)
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax3.grid(True)
+ax3.legend(loc='upper left')
 
 # Minmax_Heapselect
 fig4, ax4 = plt.subplots()
@@ -713,6 +710,7 @@ fit4 = np.poly1d(coeff4)
 ax4.plot(xs, fit4(xs+np.log(xs)*xs), color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n+klogk)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax4.grid(True)
+ax4.legend(loc='upper left')
 
 # Median of medians select 
 fig5, ax5 = plt.subplots()
@@ -722,28 +720,24 @@ a5, b5 = np.polyfit(xs, ys5, 1)
 ax5.plot(xs, a5*nxs+b5, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
 ax5.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax5.grid(True)
+ax5.legend(loc='upper left')
 
 # GRAFICO COMPLETO
 fig6, ax6 = plt.subplots()
 fig6.suptitle("Grafico di comparazione")
 plt.scatter(xs, ys1, color='green', label='Randomized QuickSelect', alpha=0.50)
-ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50)
+ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized Quickselect')
 plt.scatter(xs, ys2, color='blue', label='QuickSelect', alpha=0.50)
-ax6.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50)
+ax6.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50, label='Quickselect')
 plt.scatter(xs, ys3, color='red', label='HeapSelect', alpha=0.50)
-ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50)
+ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50, label='Heapselect')
 plt.scatter(xs, ys5, color='orange', label='MedianodMediansSelect', alpha=0.50)
-ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50)
+ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50, label='Median of medians select')
 ax6.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax6.grid(True)
 plt.xscale('log')
 plt.yscale('log')
-ax5.legend()
-
+ax6.legend(loc='upper left')
 
 plt.show()
 plt.close()
-
-# Scala logaritmica
-# plt.xscale('log')
-# plt.yscale('log')
