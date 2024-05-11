@@ -126,8 +126,8 @@ class Maxheap:
 # Implementazione MinHeap Ausiliaria
 class MaxheapAux:
 
-  #   heap: array di interi che rappresentano i valori dei nodi
-  #   ??? pos: array di interi che rappresentano le posizioni dei nodi
+  # heap: array di interi che rappresentano i valori dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
   def __init__(self):
       self.heap = []
       self.pos = []
