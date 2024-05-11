@@ -433,8 +433,8 @@ class Maxheap:
 # Implementazione MinHeap Ausiliaria
 class MaxheapAux:
 
-  #   heap: array di interi che rappresentano i valori dei nodi
-  #   ??? pos: array di interi che rappresentano le posizioni dei nodi
+  # heap: array di interi che rappresentano i valori dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
   def __init__(self):
       self.heap = []
       self.pos = []
@@ -635,14 +635,14 @@ def resolution():
 # func funzione
 # risoluzione del clock
 # RETURN: tempo medio dell'esecuzione per una singola istanza 
-def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
+def benchmark(n, maxv, k, func, risoluzione, max_rel_error=0.001):
     tmin = risoluzione * ( 1 + ( 1 / max_rel_error ) )
     count = 0
     start = time.perf_counter()
     while (time.perf_counter() - start) < tmin:
         a = genera_input(n, maxv)
+        if k == 0: k = len(a)
         if len(a) > 0:  # Check if array is empty
-            k = 1
             func(a, k)
         count += 1
     duration = time.perf_counter() - start
@@ -653,7 +653,7 @@ if __name__=="__main__":
     risoluzione = resolution()
     nmin = 100
     nmax = 100000
-    iters = 100      # quante volte genera un array di tale dim, migliora la precisione
+    iters = 100     # quante volte genera un array di tale dim, migliora la precisione
     base = 2 ** ( (math.log(nmax) - math.log(nmin)) / (iters-1) )
 
     points = [(None, None, None, None, None)] * iters
@@ -661,14 +661,14 @@ if __name__=="__main__":
     for i in range(iters):
         print(f"\r{i}",end='')
         n = int(nmin * (base ** i))
-        points[i] = (n, benchmark(n, n, randomized_quickselect, risoluzione, 0.001),
-                        benchmark(n, n, quickselect, risoluzione, 0.001),
-                        benchmark(n, n, min_heapselect, risoluzione, 0.001),
-                        benchmark(n, n, minmax_heapselect, risoluzione, 0.001),
-                        benchmark(n, n, median_of_medians_select, risoluzione, 0.001))
+        points[i] = (n, benchmark(n, n, 1, randomized_quickselect, risoluzione, 0.001),
+                        benchmark(n, n, 1, quickselect, risoluzione, 0.001),
+                        benchmark(n, n, 0, min_heapselect, risoluzione, 0.001),
+                        benchmark(n, n, 0, minmax_heapselect, risoluzione, 0.001),
+                        benchmark(n, n, 0, median_of_medians_select, risoluzione, 0.001))
 
 # Plot
-xs, ys1, ys2, ys3, ys4, ys5 = zip(*points)
+xs, ys1, ys2, ys3, ys4, ys5= zip(*points)
 nxs = np.array(xs)
 
 # TEMPI DI ESECUZIONE NEL CASO PEGGIORE
@@ -688,7 +688,6 @@ ax1.legend(loc='upper left')
 fig2, ax2 = plt.subplots()
 fig2.suptitle("Tempo di esecuzione QuickSelect")
 plt.scatter(xs, ys2)
-a2, b2 = np.polyfit(xs, ys2, 1)
 coeff2 = np.polyfit(xs, ys2, 2)
 fit2 = np.poly1d(coeff2)
 ax2.plot(xs, fit2(xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)') # Th(n^2)
@@ -700,20 +699,20 @@ ax2.legend(loc='upper left')
 fig3, ax3 = plt.subplots()
 fig3.suptitle("Tempo di esecuzione HeapSelect")
 plt.scatter(xs, ys3)
-coeff3 = np.polyfit(np.log(xs)*xs,ys4,1)
+coeff3 = np.polyfit(xs+np.log(xs)*xs,ys3,1)
 fit3 = np.poly1d(coeff3)
-ax3.plot(xs, fit3(np.log(xs)*xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)') # O(n+klogk)
+ax3.plot(xs, fit3(xs+np.log(xs)*xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)') # O(n+klogk)
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax3.grid(True)
 ax3.legend(loc='upper left')
 
 # Minmax_Heapselect
 fig4, ax4 = plt.subplots()
-fig4.suptitle("Tempo di esecuzione Minmax_HeapSelect")
-plt.scatter(xs, ys5)
-coeff4 = np.polyfit(np.log(xs)*xs,ys4,1)
+fig4.suptitle("Tempo di esecuzione Minmax HeapSelect")
+plt.scatter(xs, ys4)
+coeff4 = np.polyfit(xs+np.log(xs)*xs,ys4,1)
 fit4 = np.poly1d(coeff4)
-ax4.plot(xs, fit4(xs+np.log(xs)*xs), color='orange', linestyle='dashed', linewidth=2.5, label='best fit (worst)') # O(n+klogk)
+ax4.plot(xs, fit4(xs+np.log(xs)*xs), color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)') # O(n+klogk)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax4.grid(True)
 ax4.legend(loc='upper left')
@@ -721,7 +720,7 @@ ax4.legend(loc='upper left')
 # Median of medians select 
 fig5, ax5 = plt.subplots()
 fig5.suptitle("Tempo di esecuzione MedianOfMediansSelect")
-plt.scatter(xs, ys4)
+plt.scatter(xs, ys5)
 a5, b5 = np.polyfit(xs, ys5, 1)
 ax5.plot(xs, a5*nxs+b5, color='red', linestyle='dashed', linewidth=2.5, label='best fit (worst)') # O(n)
 ax5.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
@@ -731,20 +730,39 @@ ax5.legend(loc='upper left')
 # GRAFICO COMPLETO
 fig6, ax6 = plt.subplots()
 fig6.suptitle("Grafico di comparazione")
-plt.scatter(xs, ys1, color='green', label='Randomized QuickSelect', alpha=0.50)
-ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50)
-plt.scatter(xs, ys2, color='blue', label='QuickSelect', alpha=0.50)
-ax6.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50)
-plt.scatter(xs, ys3, color='red', label='HeapSelect', alpha=0.50)
-ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50)
-plt.scatter(xs, ys5, color='orange', label='MedianodMediansSelect', alpha=0.50)
-ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50)
+# plt.scatter(xs, ys1, color='green', alpha=0.50)
+# ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized QuickSelect')
+plt.scatter(xs, ys2, color='blue', alpha=0.50)
+ax6.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50, label='QuickSelect')
+plt.scatter(xs, ys3, color='red', alpha=0.50)
+ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50, label='HeapSelect')
+plt.scatter(xs, ys5, color='orange', alpha=0.50)
+ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50, label='MedianodMediansSelect')
 ax6.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax6.grid(True)
-plt.xscale('log')
-plt.yscale('log')
 ax6.legend(loc='upper left')
 
+# GRAFICO QUICKSELECT E RANDOMIZED QUICKSELECT
+fig7, ax7 = plt.subplots()
+fig7.suptitle("Tempo di esecuzione Randomized QuickSelect")
+plt.scatter(xs, ys2, color='green', alpha=0.50)
+plt.scatter(xs, ys1, color='blue', alpha=0.50)
+ax7.plot(xs, ys2, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='QuickSelect')
+ax7.plot(xs, ys1, color='blue', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized QuickSelect')
+ax7.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax7.grid(True)
+ax7.legend(loc='upper left')
+
+# GRAFICO HEAPSELECT E VARIANTE
+fig8, ax8 = plt.subplots()
+fig8.suptitle("Comparazione Heapselect con variante")
+plt.scatter(xs, ys3, color='orange')
+plt.scatter(xs, ys4, color='red')
+ax8.plot(xs, ys3, color='orange', linestyle='-', linewidth=2.5, alpha=0.50, label='HeapSelect')
+ax8.plot(xs, ys4, color='red', linestyle='-', linewidth=2.5, alpha=0.50, label='Minmax HeapSelect')
+ax8.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax8.grid(True)
+ax8.legend(loc='upper left')
 
 plt.show()
 plt.close()
