@@ -1,11 +1,12 @@
 # Algoritmo HeapSelect con complessita'
 # Th(n) sia nel caso pessimo che nel caso medio
+# Utilizza una Maxheap e una Maxheap Ausiliaria
 
 # a array
 # p indice di inizio array
 # r indice di fine array
 # k indice dell'elemento da trovare
-def heap_select(a, k):
+def heapselect(a, k):
   main_heap = Maxheap()
   main_heap.buildheap(a)
   aux_heap = MaxheapAux()
@@ -26,7 +27,7 @@ def heap_select(a, k):
   return x
 
 
-# Implementazione MinHeap
+# Implementazione Maxheap
 class Maxheap:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -123,7 +124,7 @@ class Maxheap:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.moveup(p)
 
-# Implementazione MinHeap Ausiliaria
+# Implementazione Maxheap Ausiliaria
 class MaxheapAux:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -193,7 +194,7 @@ class MaxheapAux:
           self.heapify(i)
 
   # a array di interi
-  # costruisce una minheap dall'array a 
+  # costruisce una maxheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
@@ -201,7 +202,7 @@ class MaxheapAux:
 
   # i indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con randice il
-  # nodo in posizione i sia una minheap
+  # nodo in posizione i sia una maxheap
   def heapify(self, i):
       l = self.left(i)
       r = self.right(i)
@@ -235,4 +236,4 @@ def input_array():
 
 a = input_array()
 k = int(input())
-print( heap_select(a, k) )
+print( heapselect(a, k) )
