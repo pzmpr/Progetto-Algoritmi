@@ -62,6 +62,7 @@ def randomized_partition(a, low, high):
   a[high-1], a[i] = a[i], a[high-1]
   return partition(a, low, high)
 
+
 # ^ HEAPSELCT ^ #
 
 # Algoritmo HeapSelect con complessita'
@@ -98,7 +99,6 @@ def min_heapselect(a, k):
 
   (x, j) = aux_heap.getmin()
   return x
-
 
 # Implementazione MinHeap
 class Minheap:
@@ -308,7 +308,6 @@ class MinheapAux:
 # p indice di inizio array
 # r indice di fine array
 # k indice dell'elemento da trovare
-
 def max_heapselect(a, k):
   main_heap = Maxheap()
   main_heap.buildheap(a)
@@ -430,8 +429,8 @@ class Maxheap:
 # Implementazione MinHeap Ausiliaria
 class MaxheapAux:
 
-  #   heap: array di interi che rappresentano i valori dei nodi
-  #   ??? pos: array di interi che rappresentano le posizioni dei nodi
+  # heap: array di interi che rappresentano i valori dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
   def __init__(self):
       self.heap = []
       self.pos = []
@@ -544,7 +543,6 @@ def medianofmedians_select(a, i):
 # r fine dell'array
 # i indice dell'elemento da trovare
 def select2(a,p,r,i):
-
   while (r-p+1) % 5 != 0:     # ripeto finche' non ho un numero di elementi multiplo di 5
     if r - p != 0:
       for j in range(p, r+1): # metto il minimo in prima posizione
@@ -694,7 +692,7 @@ ax2.legend(loc='upper left')
 fig3, ax3 = plt.subplots()
 fig3.suptitle("Tempo di esecuzione HeapSelect")
 plt.scatter(xs, ys3)
-coeff3 = np.polyfit(np.log(xs)*xs,ys4,1)
+coeff3 = np.polyfit(xs+np.log(xs)*xs,ys3,1)
 fit3 = np.poly1d(coeff3)
 ax3.plot(xs, fit3(xs+np.log(xs)*xs), color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n+klogk)
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
@@ -703,9 +701,9 @@ ax3.legend(loc='upper left')
 
 # Minmax_Heapselect
 fig4, ax4 = plt.subplots()
-fig4.suptitle("Tempo di esecuzione Minmax_HeapSelect")
-plt.scatter(xs, ys5)
-coeff4 = np.polyfit(np.log(xs)*xs,ys4,1)
+fig4.suptitle("Tempo di esecuzione Minmax HeapSelect")
+plt.scatter(xs, ys4)
+coeff4 = np.polyfit(xs+np.log(xs)*xs,ys4,1)
 fit4 = np.poly1d(coeff4)
 ax4.plot(xs, fit4(xs+np.log(xs)*xs), color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n+klogk)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
@@ -725,19 +723,39 @@ ax5.legend(loc='upper left')
 # GRAFICO COMPLETO
 fig6, ax6 = plt.subplots()
 fig6.suptitle("Grafico di comparazione")
-plt.scatter(xs, ys1, color='green', label='Randomized QuickSelect', alpha=0.50)
-ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized Quickselect')
-plt.scatter(xs, ys2, color='blue', label='QuickSelect', alpha=0.50)
+# plt.scatter(xs, ys1, color='green', alpha=0.50)
+# ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized Quickselect')
+plt.scatter(xs, ys2, color='blue', alpha=0.50)
 ax6.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50, label='Quickselect')
-plt.scatter(xs, ys3, color='red', label='HeapSelect', alpha=0.50)
+plt.scatter(xs, ys3, color='red', alpha=0.50)
 ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50, label='Heapselect')
-plt.scatter(xs, ys5, color='orange', label='MedianodMediansSelect', alpha=0.50)
+plt.scatter(xs, ys5, color='orange', alpha=0.50)
 ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50, label='Median of medians select')
 ax6.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax6.grid(True)
-plt.xscale('log')
-plt.yscale('log')
 ax6.legend(loc='upper left')
+
+# GRAFICO QUICKSELECT E RANDOMIZED QUICKSELECT
+fig7, ax7 = plt.subplots()
+fig7.suptitle("Tempo di esecuzione Randomized QuickSelect")
+plt.scatter(xs, ys2, color='green', alpha=0.50)
+plt.scatter(xs, ys1, color='blue', alpha=0.50)
+ax7.plot(xs, ys2, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='QuickSelect')
+ax7.plot(xs, ys1, color='blue', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized QuickSelect')
+ax7.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax7.grid(True)
+ax7.legend(loc='upper left')
+
+# GRAFICO HEAPSELECT E VARIANTE
+fig8, ax8 = plt.subplots()
+fig8.suptitle("Comparazione Heapselect con variante")
+plt.scatter(xs, ys3, color='orange')
+plt.scatter(xs, ys4, color='red')
+ax8.plot(xs, ys3, color='orange', linestyle='-', linewidth=2.5, alpha=0.50, label='HeapSelect')
+ax8.plot(xs, ys4, color='red', linestyle='-', linewidth=2.5, alpha=0.50, label='Minmax HeapSelect')
+ax8.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax8.grid(True)
+ax8.legend(loc='upper left')
 
 plt.show()
 plt.close()
