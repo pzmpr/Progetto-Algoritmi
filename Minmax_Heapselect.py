@@ -3,17 +3,22 @@
 
 # Variante dell'heapselect
 # in base al valore di k viene scelta la procedura con minheap o maxheap
-def heap_select(a, k):
+# a array di interi
+# k indice dell'elemento da trovare
+def heapselect(a, k):
     if k > len(a)//2:
-        max_heap_select(a, k)
+        max_heapselect(a, k)
     else:
-        min_heap_select(a, k)
+        min_heapselect(a, k)
 
-# a array
+
+# ^ MIN_HEAPSELECT ^ #
+
+# a array di interi
 # p indice di inizio array
 # r indice di fine array
 # k indice dell'elemento da trovare
-def min_heap_select(a, k):
+def min_heapselect(a, k):
   main_heap = Minheap()
   main_heap.buildheap(a)
   aux_heap = MinheapAux()
@@ -34,7 +39,7 @@ def min_heap_select(a, k):
   return x
 
 
-# Implementazione MinHeap
+# Implementazione Minheap
 class Minheap:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -131,11 +136,11 @@ class Minheap:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.moveup(p)
 
-# Implementazione MinHeap Ausiliaria
+# Implementazione Minheap Ausiliaria
 class MinheapAux:
 
   # heap: array di interi che rappresentano i valori dei nodi
-  # ??? pos: array di interi che rappresentano le posizioni dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
   def __init__(self):
       self.heap = []
       self.pos = []
@@ -235,6 +240,9 @@ class MinheapAux:
           self.pos[i], self.pos[p] = self.pos[p], self.pos[i]
           self.moveup(p)
 
+
+# ^ MAX_HEAPSELECT ^ #
+
 # Algoritmo HeapSelect con complessita'
 # Th(n) sia nel caso pessimo che nel caso medio
 
@@ -243,7 +251,7 @@ class MinheapAux:
 # r indice di fine array
 # k indice dell'elemento da trovare
 
-def max_heap_select(a, k):
+def max_heapselect(a, k):
   main_heap = Maxheap()
   main_heap.buildheap(a)
   aux_heap = MaxheapAux()
@@ -264,7 +272,7 @@ def max_heap_select(a, k):
   return x
 
 
-# Implementazione MinHeap
+# Implementazione MaxHeap
 class Maxheap:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -361,11 +369,11 @@ class Maxheap:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.moveup(p)
 
-# Implementazione MinHeap Ausiliaria
+# Implementazione MaxHeap Ausiliaria
 class MaxheapAux:
 
-  #   heap: array di interi che rappresentano i valori dei nodi
-  #   ??? pos: array di interi che rappresentano le posizioni dei nodi
+  # heap: array di interi che rappresentano i valori dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
   def __init__(self):
       self.heap = []
       self.pos = []
@@ -473,4 +481,4 @@ def input_array():
 
 a = input_array()
 k = int(input())
-print( heap_select(a, k) )
+print( heapselect(a, k) )
