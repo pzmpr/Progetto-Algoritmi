@@ -679,6 +679,17 @@ ax1.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (
 ax1.grid(True)
 ax1.legend(loc='upper left')
 
+fig11, ax11 = plt.subplots()
+fig11.suptitle("Tempo di esecuzione Randomized QuickSelect (log)")
+ax11.scatter(xs, ys1, color='#A5B592', s=10)
+ax11.plot(xs, ys1, color='#A5B592', label='Randomized QuickSelect')
+ax11.plot(xs, a1*nxs+b1, color='#404040', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
+ax11.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax11.grid(True)
+ax11.legend(loc='upper left')
+ax11.set_xscale("log")
+ax11.set_yscale("log")
+
 # Quickselect
 fig2, ax2 = plt.subplots()
 fig2.suptitle("Tempo di esecuzione QuickSelect")
@@ -689,6 +700,17 @@ ax2.plot(xs, a2*nxs+b2, color='orange', linestyle='dashed', linewidth=2.5, label
 ax2.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax2.grid(True)
 ax2.legend(loc='upper left')
+
+fig12, ax12 = plt.subplots()
+fig12.suptitle("Tempo di esecuzione QuickSelect (log)")
+plt.scatter(xs, ys2, color='#A23E48', s=10)
+plt.plot(xs, ys2, color='#A23E48', label='QuickSelect')
+ax12.plot(xs, a2*nxs+b2, color='orange', linestyle='dashed', linewidth=2.5, label='best fit (average)') # O(n)
+ax12.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax12.grid(True)
+ax12.legend(loc='upper left')
+ax12.set_xscale("log")
+ax12.set_yscale("log")
 
 # Heapselect
 fig3, ax3 = plt.subplots()
@@ -701,6 +723,17 @@ ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (
 ax3.grid(True)
 ax3.legend(loc='upper left')
 
+fig13, ax13 = plt.subplots()
+fig13.suptitle("Tempo di esecuzione Heapselect (log)")
+plt.scatter(xs, ys3, color='#4A6C6F', s=10)
+plt.plot(xs, ys3, color='#4A6C6F', label='HeapSelect')
+ax13.plot(xs, fit3(np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50, label='O(n + k logk)') # O(n+klogk)
+ax13.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax13.grid(True)
+ax13.legend(loc='upper left')
+ax13.set_xscale("log")
+ax13.set_yscale("log")
+
 # Minmax_Heapselect
 fig4, ax4 = plt.subplots()
 fig4.suptitle("Tempo di esecuzione Minmax HeapSelect")
@@ -712,6 +745,17 @@ ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (
 ax4.grid(True)
 ax4.legend(loc='upper left')
 
+fig14, ax14 = plt.subplots()
+fig14.suptitle("Tempo di esecuzione Minmax Heapselect (log)")
+plt.scatter(xs, ys4, color='#3BB273', s=10)
+plt.plot(xs, ys4, color='#3BB273', label='Minmax_HeapSelect')
+ax14.plot(xs, fit4(xs+np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50 , label='O(n + k logk)') # O(n+klogk)
+ax14.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax14.grid(True)
+ax14.legend(loc='upper left')
+ax14.set_xscale("log")
+ax14.set_yscale("log")
+
 # Median of medians select 
 fig5, ax5 = plt.subplots()
 fig5.suptitle("Tempo di esecuzione MedianOfMediansSelect")
@@ -722,20 +766,46 @@ ax5.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (
 ax5.grid(True)
 ax5.legend(loc='upper left')
 
+fig15, ax15 = plt.subplots()
+fig15.suptitle("Tempo di esecuzione MedianOfMediansSelect (log)")
+plt.scatter(xs, ys5, color='#FFAD0A', s=10)
+plt.plot(xs, ys5, color='#FFAD0A', label='MedianOfMediansSelect')
+ax15.plot(xs, a5*nxs+b5, color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50, label='O(n)') # O(n)
+ax15.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax15.grid(True)
+ax15.legend(loc='upper left')
+ax15.set_xscale("log")
+ax15.set_yscale("log")
+
 # GRAFICO COMPLETO
 fig6, ax6 = plt.subplots()
 fig6.suptitle("Grafico di comparazione")
-# plt.scatter(xs, ys1, color='green', alpha=0.50)
-# ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50, label='Randomized Quickselect')
-plt.scatter(xs, ys2, color='blue', alpha=0.50)
-ax6.plot(xs, ys2, color='blue', linestyle='-', linewidth=2.5, alpha=0.50, label='Quickselect')
-plt.scatter(xs, ys3, color='red', alpha=0.50)
-ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50, label='Heapselect')
-plt.scatter(xs, ys5, color='orange', alpha=0.50)
-ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50, label='Median of medians select')
+plt.scatter(xs, ys1, color='green', alpha=0.50, label='Randomized QuickSelect')
+ax6.plot(xs, ys1, color='green', linestyle='-', linewidth=2.5, alpha=0.50)
+plt.scatter(xs, ys3, color='red', alpha=0.50, label='HeapSelect')
+ax6.plot(xs, ys3, color='red', linestyle='-', linewidth=2.5, alpha=0.50)
+plt.scatter(xs, ys5, color='orange', alpha=0.50, label='MedianodMediansSelect')
+ax6.plot(xs, ys5, color='orange', linestyle='-', linewidth=2.5, alpha=0.50)
 ax6.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax6.grid(True)
 ax6.legend(loc='upper left')
+
+fig16, ax16 = plt.subplots()
+fig16.suptitle("Grafico di comparazione (log)")
+plt.scatter(xs, ys2, color='#A5B592', label='Randomized QuickSelect', s=10)
+ax16.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5)
+
+plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=10)
+ax16.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5)
+
+plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=10)
+ax16.plot(xs, ys5, color='#FFAD0A', linestyle='-', linewidth=2.5)
+
+ax16.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax16.grid(True)
+ax16.legend(loc='upper left')
+ax16.set_xscale("log")
+ax16.set_yscale("log")
 
 # GRAFICO QUICKSELECT E RANDOMIZED QUICKSELECT
 fig7, ax7 = plt.subplots()
