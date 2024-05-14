@@ -1,10 +1,10 @@
 # Algoritmo HeapSelect con complessita'
 # Th(n) sia nel caso pessimo che nel caso medio
 
-# Variante dell'heapselect
+# a: array di interi
+# k: indice dell'elemento da trovare
+# variante dell'heapselect
 # in base al valore di k viene scelta la procedura con minheap o maxheap
-# a array di interi
-# k indice dell'elemento da trovare
 def heapselect(a, k):
     if k > len(a)//2:
         max_heapselect(a, k)
@@ -12,12 +12,10 @@ def heapselect(a, k):
         min_heapselect(a, k)
 
 
-# ^ MIN_HEAPSELECT ^ #
+# ^ MIN_HEAPSELECT ^
 
-# a array di interi
-# p indice di inizio array
-# r indice di fine array
-# k indice dell'elemento da trovare
+# a: array
+# k: indice dell'elemento da trovare
 def min_heapselect(a, k):
   main_heap = Minheap()
   main_heap.buildheap(a)
@@ -39,7 +37,7 @@ def min_heapselect(a, k):
   return x
 
 
-# Implementazione Minheap
+# Implementazione MinHeap
 class Minheap:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -55,7 +53,7 @@ class Minheap:
       assert len(self.heap) > 0
       return self.heap[0]
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -63,16 +61,18 @@ class Minheap:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -85,14 +85,14 @@ class Minheap:
       self.heap = self.heap[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x):
       self.heap.append(x)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -103,14 +103,14 @@ class Minheap:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
+  # a: array di interi
   # costruisce una minheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
+  # i: indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con radice il
   # nodo in posizione i sia una minheap
   def heapify(self, i):
@@ -125,7 +125,7 @@ class Minheap:
           self.heap[i], self.heap[argmin] = self.heap[argmin], self.heap[i]
           self.heapify(argmin)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -136,7 +136,7 @@ class Minheap:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.moveup(p)
 
-# Implementazione Minheap Ausiliaria
+# Implementazione MinHeap Ausiliaria
 class MinheapAux:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -154,7 +154,7 @@ class MinheapAux:
       assert len(self.heap) > 0
       return (self.heap[0], self.pos[0])
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -162,16 +162,18 @@ class MinheapAux:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -186,15 +188,15 @@ class MinheapAux:
       self.pos = self.pos[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x, p):
       self.heap.append(x)
       self.pos.append(p)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -205,14 +207,14 @@ class MinheapAux:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
+  # a: array di interi
   # costruisce una minheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
+  # i: indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con randice il
   # nodo in posizione i sia una minheap
   def heapify(self, i):
@@ -228,7 +230,7 @@ class MinheapAux:
           self.pos[i], self.pos[argmin] = self.pos[argmin], self.pos[i]
           self.heapify(argmin)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -241,16 +243,13 @@ class MinheapAux:
           self.moveup(p)
 
 
-# ^ MAX_HEAPSELECT ^ #
+# ^ MAX_HEAPSELECT ^
 
 # Algoritmo HeapSelect con complessita'
 # Th(n) sia nel caso pessimo che nel caso medio
 
-# a array
-# p indice di inizio array
-# r indice di fine array
-# k indice dell'elemento da trovare
-
+# a: array
+# k: indice dell'elemento da trovare
 def max_heapselect(a, k):
   main_heap = Maxheap()
   main_heap.buildheap(a)
@@ -272,7 +271,7 @@ def max_heapselect(a, k):
   return x
 
 
-# Implementazione MaxHeap
+# Implementazione Maxheap
 class Maxheap:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -288,7 +287,7 @@ class Maxheap:
       assert len(self.heap) > 0
       return self.heap[0]
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -296,16 +295,18 @@ class Maxheap:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -318,14 +319,14 @@ class Maxheap:
       self.heap = self.heap[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x):
       self.heap.append(x)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -336,14 +337,14 @@ class Maxheap:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
+  # a: array di interi
   # costruisce una maxheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
+  # i: indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con radice il
   # nodo in posizione i sia una maxheap
   def heapify(self, i):
@@ -358,7 +359,7 @@ class Maxheap:
           self.heap[i], self.heap[argmax] = self.heap[argmax], self.heap[i]
           self.heapify(argmax)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -369,7 +370,7 @@ class Maxheap:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.moveup(p)
 
-# Implementazione MaxHeap Ausiliaria
+# Implementazione Maxheap Ausiliaria
 class MaxheapAux:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -387,7 +388,7 @@ class MaxheapAux:
       assert len(self.heap) > 0
       return (self.heap[0], self.pos[0])
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -395,16 +396,18 @@ class MaxheapAux:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -419,15 +422,15 @@ class MaxheapAux:
       self.pos = self.pos[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x, p):
       self.heap.append(x)
       self.pos.append(p)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -438,16 +441,16 @@ class MaxheapAux:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
-  # costruisce una minheap dall'array a 
+  # a: array di interi
+  # costruisce una maxheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
-  # "sistema" l'albero in modo che il sottoalbero con randice il
-  # nodo in posizione i sia una minheap
+  # i: indice del nodo da cui parte la procedura
+  # "sistema" l'albero in modo che il sottoalbero con radice il
+  # nodo in posizione i sia una maxheap
   def heapify(self, i):
       l = self.left(i)
       r = self.right(i)
@@ -461,7 +464,7 @@ class MaxheapAux:
           self.pos[i], self.pos[argmax] = self.pos[argmax], self.pos[i]
           self.heapify(argmax)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
