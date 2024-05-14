@@ -7,10 +7,10 @@ import random
 # l'ultimo elemeno dell'array come perno ne sceglie uno 
 # casualmente nell'intervallo dell'array
 
-# a array di interi
-# p indice di inizio array
-# r indice di fine array
-# i indice dell'elemento da trovare
+# a: array di interi
+# p: indice di inizio array
+# r: indice di fine array
+# i: indice dell'elemento da trovare
 def randomized_quickselect(a, i):
   return randomized_select(a, 0, len(a)-1, i)
   
@@ -27,9 +27,9 @@ def randomized_select(a, p, r, i):
     else:
       return randomized_select(a, q+1, r, i-k)
 
-# a array di interi
-# low indice di inizio array
-# high indice di fine array
+# a:    array di interi
+# low:  indice di inizio array
+# high: indice di fine array
 # sceglie un numero casuale nell'intervallo [low, high]
 # scambia il numero con l'ultimo elemento di a
 # infine richiama partition "normale"
@@ -38,10 +38,10 @@ def randomized_partition(a, low, high):
   a[high-1], a[i] = a[i], a[high-1]
   return partition(a, low, high)
 
-# a array di interi
-# low inizio dell'array
-# high fine dell'array
-# esegue partition sull'intervallo [p,r] dell'array a
+# a:    array di interi
+# low:  inizio dell'array
+# high: fine dell'array
+# esegue partition sull'intervallo [low, high] dell'array a
 def partition(a, low, high):
   p = a[high]
   i = low - 1
