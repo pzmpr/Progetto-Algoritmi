@@ -814,7 +814,7 @@ ax16.legend(loc='upper left')
 
 # GRAFICO QUICKSELECT E RANDOMIZED QUICKSELECT
 fig7, ax7 = plt.subplots()
-fig7.suptitle("Comparazione di QuickSelect con Randomized QuickSelect")
+fig7.suptitle("Comparazione tempo di esecuzione QuickSelect e Randomized QuickSelect")
 plt.scatter(xs, ys2, color='#A5B592')
 plt.scatter(xs, ys1, color='#A23E48')
 ax7.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5, label='QuickSelect')
@@ -824,7 +824,7 @@ ax7.grid(True)
 ax7.legend(loc='upper left')
 
 fig17, ax17 = plt.subplots()
-fig17.suptitle("Comparazione di QuickSelect con Randomized QuickSelect (log)")
+fig17.suptitle("Comparazione tempo di esecuzione QuickSelect e Randomized QuickSelect (log)")
 plt.scatter(xs, ys2, color='#A5B592')
 plt.scatter(xs, ys1, color='#A23E48')
 ax17.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5, label='QuickSelect')
