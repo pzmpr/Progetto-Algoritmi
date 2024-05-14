@@ -5,12 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# ^ QUICKSELECT ^ #
+# ^ QUICKSELECT ^
 
-# a array
-# p indice di inizio array
-# r indice di fine array
-# i indice dell'elemento da trovare
+# a: array  di interi
+# p: indice di inizio array
+# r: indice di fine array
+# i: indice dell'elemento da trovare
 def quickselect(a, i):
   return select(a, 0, len(a)-1, i)
 
@@ -27,10 +27,10 @@ def select(a, p, r, i):
     else:
       return select(a, q+1, r, i-k)
 
-# a array di interi
-# p inizio dell'array
-# r fine dell'array
-# esegue partition sull'intervallo [p,r] dell'array a
+# a:    array di interi
+# low:  inizio dell'array
+# high: fine dell'array
+# esegue partition sull'intervallo [low, high] dell'array a
 def partition(a, low, high):
   p = a[high]
   i = low - 1
@@ -41,6 +41,11 @@ def partition(a, low, high):
   a[i+1], a[high] = a[high], a[i+1] 
   return i + 1
 
+
+# a: array di interi
+# p: indice di inizio array
+# r: indice di fine array
+# i: indice dell'elemento da trovare
 def randomized_quickselect(a, i):
   return randomized_select(a, 0, len(a)-1, i)
 
@@ -57,29 +62,32 @@ def randomized_select(a, p, r, i):
     else:
       return randomized_select(a, q+1, r, i-k)
 
+# a:    array di interi
+# low:  indice di inizio array
+# high: indice di fine array
+# sceglie un numero casuale nell'intervallo [low, high]
+# scambia il numero con l'ultimo elemento di a
+# infine richiama partition "normale"
 def randomized_partition(a, low, high):
   i = random.randint(low, high-1)
   a[high-1], a[i] = a[i], a[high-1]
   return partition(a, low, high)
 
 
-# ^ HEAPSELCT ^ #
+# ^ HEAPSELCT ^
 
-# Algoritmo HeapSelect con complessita'
-# Th(n) sia nel caso pessimo che nel caso medio
-
-# Variante dell'heapselect
+# a: array di interi
+# k: indice dell'elemento da trovare
+# variante dell'heapselect
 # in base al valore di k viene scelta la procedura con minheap o maxheap
-def minmax_heapselect(a, k):
+def heapselect(a, k):
     if k > len(a)//2:
-        return max_heapselect(a, k)
+        max_heapselect(a, k)
     else:
-        return min_heapselect(a, k)
+        min_heapselect(a, k)
 
-# a array
-# p indice di inizio array
-# r indice di fine array
-# k indice dell'elemento da trovare
+# a: array
+# k: indice dell'elemento da trovare
 def min_heapselect(a, k):
   main_heap = Minheap()
   main_heap.buildheap(a)
@@ -116,7 +124,7 @@ class Minheap:
       assert len(self.heap) > 0
       return self.heap[0]
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -124,16 +132,18 @@ class Minheap:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -146,14 +156,14 @@ class Minheap:
       self.heap = self.heap[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x):
       self.heap.append(x)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -164,14 +174,14 @@ class Minheap:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
+  # a: array di interi
   # costruisce una minheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
+  # i: indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con radice il
   # nodo in posizione i sia una minheap
   def heapify(self, i):
@@ -186,7 +196,7 @@ class Minheap:
           self.heap[i], self.heap[argmin] = self.heap[argmin], self.heap[i]
           self.heapify(argmin)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -200,8 +210,8 @@ class Minheap:
 # Implementazione MinHeap Ausiliaria
 class MinheapAux:
 
-  #   heap: array di interi che rappresentano i valori dei nodi
-  #   ??? pos: array di interi che rappresentano le posizioni dei nodi
+  # heap: array di interi che rappresentano i valori dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
   def __init__(self):
       self.heap = []
       self.pos = []
@@ -215,7 +225,7 @@ class MinheapAux:
       assert len(self.heap) > 0
       return (self.heap[0], self.pos[0])
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -223,16 +233,18 @@ class MinheapAux:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -247,15 +259,15 @@ class MinheapAux:
       self.pos = self.pos[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x, p):
       self.heap.append(x)
       self.pos.append(p)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -266,14 +278,14 @@ class MinheapAux:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
+  # a: array di interi
   # costruisce una minheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
+  # i: indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con randice il
   # nodo in posizione i sia una minheap
   def heapify(self, i):
@@ -289,7 +301,7 @@ class MinheapAux:
           self.pos[i], self.pos[argmin] = self.pos[argmin], self.pos[i]
           self.heapify(argmin)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -301,13 +313,9 @@ class MinheapAux:
           self.pos[i], self.pos[p] = self.pos[p], self.pos[i]
           self.moveup(p)
 
-# Algoritmo HeapSelect con complessita'
-# Th(n) sia nel caso pessimo che nel caso medio
 
-# a array
-# p indice di inizio array
-# r indice di fine array
-# k indice dell'elemento da trovare
+# a: array
+# k: indice dell'elemento da trovare
 def max_heapselect(a, k):
   main_heap = Maxheap()
   main_heap.buildheap(a)
@@ -328,8 +336,7 @@ def max_heapselect(a, k):
   (x, j) = aux_heap.getmax()
   return x
 
-
-# Implementazione MinHeap
+# Implementazione Maxheap
 class Maxheap:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -345,7 +352,7 @@ class Maxheap:
       assert len(self.heap) > 0
       return self.heap[0]
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -353,16 +360,18 @@ class Maxheap:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -375,14 +384,14 @@ class Maxheap:
       self.heap = self.heap[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x):
       self.heap.append(x)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -393,14 +402,14 @@ class Maxheap:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
+  # a: array di interi
   # costruisce una maxheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
+  # i: indice del nodo da cui parte la procedura
   # "sistema" l'albero in modo che il sottoalbero con radice il
   # nodo in posizione i sia una maxheap
   def heapify(self, i):
@@ -415,7 +424,7 @@ class Maxheap:
           self.heap[i], self.heap[argmax] = self.heap[argmax], self.heap[i]
           self.heapify(argmax)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -426,7 +435,7 @@ class Maxheap:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.moveup(p)
 
-# Implementazione MinHeap Ausiliaria
+# Implementazione Maxheap Ausiliaria
 class MaxheapAux:
 
   # heap: array di interi che rappresentano i valori dei nodi
@@ -444,7 +453,7 @@ class MaxheapAux:
       assert len(self.heap) > 0
       return (self.heap[0], self.pos[0])
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del nodo padre
   # se il nodo in posizione i e' la radice, non fa nulla
   def parent(self, i):
@@ -452,16 +461,18 @@ class MaxheapAux:
           return None
       return (i + 1) // 2 - 1
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # RETURN: indice del figlio sinistro
+  # se il nodo in posizione i non ha figlio sinistro, non fa nulla
   def left(self, i):
       j = i * 2 + 1
       if j >= len(self.heap):
           return None
       return j
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # REUTRN: indice del figlio destro
+  # se il nodo in posizione i non ha figlio destro, non fa nulla
   def right(self, i):
       j = i * 2 + 2
       if j >= len(self.heap):
@@ -476,15 +487,15 @@ class MaxheapAux:
       self.pos = self.pos[:-1]
       self.heapify(0)
 
-  # x nodo da inserire
+  # x: nodo da inserire
   # inserisce il nodo nella heap
   def insert(self, x, p):
       self.heap.append(x)
       self.pos.append(p)
       self.moveup(len(self.heap) - 1)
 
-  # i indice di un nodo della heap
-  # x nodo da scambiare
+  # i: indice di un nodo della heap
+  # x: nodo da scambiare
   # scambia il nodo in posizione i nella heap con il nodo x
   def change(self, i, x):
       assert i >= 0 and i < len(self.heap)
@@ -495,16 +506,16 @@ class MaxheapAux:
           self.heap[i] = x
           self.heapify(i)
 
-  # a array di interi
-  # costruisce una minheap dall'array a 
+  # a: array di interi
+  # costruisce una maxheap dall'array a 
   def buildheap(self, a):
       self.heap = a.copy()
       for i in range(len(self.heap) - 1, -1, -1):
           self.heapify(i)
 
-  # i indice del nodo da cui parte la procedura
-  # "sistema" l'albero in modo che il sottoalbero con randice il
-  # nodo in posizione i sia una minheap
+  # i: indice del nodo da cui parte la procedura
+  # "sistema" l'albero in modo che il sottoalbero con radice il
+  # nodo in posizione i sia una maxheap
   def heapify(self, i):
       l = self.left(i)
       r = self.right(i)
@@ -518,7 +529,7 @@ class MaxheapAux:
           self.pos[i], self.pos[argmax] = self.pos[argmax], self.pos[i]
           self.heapify(argmax)
 
-  # i indice di un nodo
+  # i: indice di un nodo
   # scambia il nodo in posizione i nella heap con il suo genitore
   # se il nodo in posizione i e' la radice, non fa nulla
   def moveup(self, i):
@@ -531,49 +542,50 @@ class MaxheapAux:
           self.moveup(p)
 
 
-# ^ MEDIANOFMEDIANS ^ #
+# ^ MEDIANOFMEDIANS ^
 
-# a array di interi
-# i indice dell'elemento da trovare
-def medianofmedians_select(a, i):
-  return select2(a, 0, len(a)-1, i)
+# a: array di interi
+# i: indice dell'elemento da trovare
+def median_of_medians_select(a, i):
+  return Select(a, 0, len(a)-1, i)
 
-# a array di interi
-# p inizio dell'array
-# r fine dell'array
-# i indice dell'elemento da trovare
-def select2(a,p,r,i):
-  while (r-p+1) % 5 != 0:     # ripeto finche' non ho un numero di elementi multiplo di 5
+# a: array di interi
+# p: inizio dell'array
+# r: fine dell'array
+# i: indice dell'elemento da trovare
+def Select(a, p, r, i):
+  
+  while (r-p+1) % 5 != 0:               # ripeto finche' non ho un numero di elementi multiplo di 5
     if r - p != 0:
-      for j in range(p, r+1): # metto il minimo in prima posizione
+      for j in range(p, r+1):           # metto il minimo in prima posizione
         if a[p] > a[j]:
           a[p], a[j] = a[j], a[p]
-    if i == 1:                # se i = 1 ho finito
+    if i == 1:                          # se i = 1 ho finito
       return a[p]
-    p = p + 1                 # se i != 1 lavoro sul resto dell'array
+    p = p + 1                           # se i != 1 lavoro sul resto dell'array
     i = i - 1
-
-  g = int((r - p + 1) / 5)              # numero dei gruppi da 5 elementi (e' un intero)
+             
+  g = int((r - p + 1) / 5)              # numero dei gruppi da 5 elementi (intero)
   if g == 1:
     array_bubble_sort(a, p, g)
   else:
     for j in range(p, p+g):       
       array_bubble_sort(a, j, g)        # sorting per ogni gruppo
-                                        # bubblesort / quicksort (deve essere IN PLACE)
-  x = select2(a, p+2*g, p+3*g, -(-g//2)) # trovo median of medians
+      
+  x = Select(a, p+2*g, p+3*g, -(-g//2)) # trovo median of medians
   q = partition_around(a, p, r, x)
 
   k = q - p + 1                         # indice effettivo (senza contare lo zero)
   if i == k:
     return a[q]                         # il pivot e' il risultato
   elif i > k:
-    return select2(a, q+1, r, i-k)
+    return Select(a, q+1, r, i-k)
   else:
-    return select2(a, p, q-1, i)
+    return Select(a, p, q-1, i)
 
-# a array di interi
-# j indice del gruppo
-# g numero dei gruppi
+# a: array di interi
+# j: indice del gruppo
+# g: numero dei gruppi
 # esegue bubblesort sul gruppo j-esimo dell'array a
 def array_bubble_sort(a, j, g):
    for i in range(0, 4):
@@ -581,11 +593,11 @@ def array_bubble_sort(a, j, g):
          if a[j+k*g] > a[j+(k+1)*g]:
             a[j+k*g], a[j+(k+1)*g] = a[j+(k+1)*g], a[j+k*g]
 
-# a array di interi
-# p inizio dell'array
-# r fine dell'array
+# a: array di interi
+# p: inizio dell'array
+# r: fine dell'array
 # scambia x con l'ultimo elemento e richiama Partition "normale"
-# sull'intervallo [p,r] dell'array a
+# sull'intervallo [p, r] dell'array a
 def partition_around(a, p, r, x):
   i = p
   while a[i] != x:
@@ -593,10 +605,10 @@ def partition_around(a, p, r, x):
   a[i], a[r] = a[r], a[i]
   return partition(a, p, r)
 
-# a array di interi
-# p inizio dell'array
-# r fine dell'array
-# esegue partition sull'intervallo [p,r] dell'array a
+# a: array di interi
+# p: inizio dell'array
+# r: fine dell'array
+# esegue partition sull'intervallo [p, r] dell'array a
 def partition(a, p, r):
   x = a[r]
   u = p - 1
@@ -605,11 +617,13 @@ def partition(a, p, r):
       u = u + 1
       a[u], a[v] = a[v], a[u]
   a[u+1], a[r] = a[r], a[u+1] 
-  return u + 1   # indice di median of medians alla fine di Partition
+  return u + 1
 
 
-# ^ EXECUTION TIME ^ #
+# ^ TEMPI DI ESECUZIONE ^
 
+# n:    numero di interi da generare
+# maxv: valore massimo che puo' assumere un elemento dell'array
 # genera array di dimensione n con interi compresi nell'intervallo [0, maxv] 
 def genera_input(n, maxv):
     a = [0] * n
@@ -625,10 +639,11 @@ def resolution():
     stop = time.perf_counter()
     return stop - start
 
-# n dimensione degli array
-# maxv massimo valore degli elementi
-# func funzione
-# risoluzione del clock
+# n:             dimensione degli array
+# maxv:          valore massimo che puo' assumere un elemento dell'array
+# func:          funzione
+# risoluzione:   risoluzione del clock
+# max_rel_error: massimo errore relativo
 # RETURN: tempo medio dell'esecuzione per una singola istanza 
 def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
     tmin = risoluzione * ( 1 + ( 1 / max_rel_error ) )
@@ -636,7 +651,7 @@ def benchmark(n, maxv, func, risoluzione, max_rel_error=0.001):
     start = time.perf_counter()
     while (time.perf_counter() - start) < tmin:
         a = genera_input(n, maxv)
-        if len(a) > 0:  # Check if array is empty
+        if len(a) > 0:
             k = random.randint(1, n)
             func(a, k)
         count += 1
@@ -648,10 +663,10 @@ if __name__=="__main__":
     risoluzione = resolution()
     nmin = 100
     nmax = 100000
-    iters = 100      # quante volte genera un array di tale dim, migliora la precisione
+    iters = 100
     base = 2 ** ( (math.log(nmax) - math.log(nmin)) / (iters-1) )
 
-    points = [(None, None, None, None, None)] * iters
+    points = [(None, None, None, None, None, None)] * iters
 
     for i in range(iters):
         print(f"\r{i}",end='')
@@ -666,7 +681,8 @@ if __name__=="__main__":
 xs, ys1, ys2, ys3, ys4, ys5 = zip(*points)
 nxs = np.array(xs)
 
-# TEMPI DI ESECUZIONE NEL CASO MEDIO
+
+# TEMPI DI ESECUZIONE NEL CASO MEDIO (scala lineare e logaritmica)
 
 # Randondimized Quickselect
 fig1, ax1 = plt.subplots()
