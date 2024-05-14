@@ -3,8 +3,6 @@
 # Utilizza una Minheap e una Minheap ausiliaria
 
 # a: array
-# p: indice di inizio array
-# r: indice di fine array
 # k: indice dell'elemento da trovare
 def heapselect(a, k):
   main_heap = Minheap()
