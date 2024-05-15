@@ -684,7 +684,7 @@ nxs = np.array(xs)
 
 # TEMPI DI ESECUZIONE NEL CASO MEDIO (scala lineare e logaritmica)
 
-# Randondimized Quickselect
+# Randomized Quickselect
 fig1, ax1 = plt.subplots()
 fig1.suptitle("Tempo di esecuzione Randomized QuickSelect")
 plt.scatter(xs, ys1, color='#A5B592', s=20)
