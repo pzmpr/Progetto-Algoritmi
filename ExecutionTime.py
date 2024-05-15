@@ -675,7 +675,7 @@ if __name__=="__main__":
                         benchmark(n, n, quickselect, risoluzione, 0.001),
                         benchmark(n, n, min_heapselect, risoluzione, 0.001),
                         benchmark(n, n, minmax_heapselect, risoluzione, 0.001),
-                        benchmark(n, n, medianofmedians_select, risoluzione, 0.001))
+                        benchmark(n, n, median_of_medians_select, risoluzione, 0.001))
 
 # Plot
 xs, ys1, ys2, ys3, ys4, ys5 = zip(*points)
