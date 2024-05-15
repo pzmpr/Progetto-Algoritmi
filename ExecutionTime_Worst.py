@@ -643,6 +643,7 @@ def resolution():
 
 # n:             dimensione degli array
 # maxv:          valore massimo che puo' assumere un elemento dell'array
+# k:             indice dell'elemento da trovare
 # func:          funzione
 # risoluzione:   risoluzione del clock
 # max_rel_error: massimo errore relativo
