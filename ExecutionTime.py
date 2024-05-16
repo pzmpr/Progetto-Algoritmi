@@ -799,8 +799,8 @@ ax15.legend(loc='upper left')
 # GRAFICO COMPLETO
 fig6, ax6 = plt.subplots()
 fig6.suptitle("Grafico di comparazione")
-plt.scatter(xs, ys2, color='#A5B592', label='Randomized QuickSelect', s=20)
-ax6.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5)
+plt.scatter(xs, ys1, color='#A5B592', label='Randomized QuickSelect', s=20)
+ax6.plot(xs, ys1, color='#A5B592', linestyle='-', linewidth=2.5)
 
 plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
 ax6.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5)
@@ -813,8 +813,8 @@ ax6.legend(loc='upper left')
 
 fig16, ax16 = plt.subplots()
 fig16.suptitle("Grafico di comparazione (log)")
-plt.scatter(xs, ys2, color='#A5B592', label='Randomized QuickSelect', s=20)
-ax16.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5)
+plt.scatter(xs, ys1, color='#A5B592', label='Randomized QuickSelect', s=20)
+ax16.plot(xs, ys1, color='#A5B592', linestyle='-', linewidth=2.5)
 
 plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
 ax16.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5)
