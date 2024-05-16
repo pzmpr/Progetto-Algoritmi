@@ -63,13 +63,24 @@ def randomized_partition(a, low, high):
   return partition(a, low, high)
 
 
-# ^ HEAPSELECT ^ #
+# ^ HEAPSELCT ^ #
+
+# Algoritmo HeapSelect con complessita'
+# Th(n) sia nel caso pessimo che nel caso medio
+
+# Variante dell'heapselect
+# in base al valore di k viene scelta la procedura con minheap o maxheap
+def minmax_heapselect(a, k):
+    if k > len(a)//2:
+        return max_heapselect(a, k)
+    else:
+        return min_heapselect(a, k)
 
 # a array
 # p indice di inizio array
 # r indice di fine array
 # k indice dell'elemento da trovare
-def heapselect(a, k):
+def min_heapselect(a, k):
   main_heap = Minheap()
   main_heap.buildheap(a)
   aux_heap = MinheapAux()
@@ -88,7 +99,6 @@ def heapselect(a, k):
 
   (x, j) = aux_heap.getmin()
   return x
-
 
 # Implementazione MinHeap
 class Minheap:
@@ -122,7 +132,7 @@ class Minheap:
           return None
       return j
 
-  # i indice di un nofo
+  # i indice di un nodo
   # REUTRN: indice del figlio destro
   def right(self, i):
       j = i * 2 + 2
@@ -162,7 +172,7 @@ class Minheap:
           self.heapify(i)
 
   # i indice del nodo da cui parte la procedura
-  # "sistema" l'albero in modo che il sottoalbero con randice il
+  # "sistema" l'albero in modo che il sottoalbero con radice il
   # nodo in posizione i sia una minheap
   def heapify(self, i):
       l = self.left(i)
@@ -221,7 +231,7 @@ class MinheapAux:
           return None
       return j
 
-  # i indice di un nofo
+  # i indice di un nodo
   # REUTRN: indice del figlio destro
   def right(self, i):
       j = i * 2 + 2
@@ -290,13 +300,242 @@ class MinheapAux:
           self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
           self.pos[i], self.pos[p] = self.pos[p], self.pos[i]
           self.moveup(p)
-         
-          
+
+# Algoritmo HeapSelect con complessita'
+# Th(n) sia nel caso pessimo che nel caso medio
+
+# a array
+# p indice di inizio array
+# r indice di fine array
+# k indice dell'elemento da trovare
+def max_heapselect(a, k):
+  main_heap = Maxheap()
+  main_heap.buildheap(a)
+  aux_heap = MaxheapAux()
+  aux_heap.insert(main_heap.heap[0], 0)
+
+  for i in range(len(a)-1, k-1, -1):
+      (x, j) = aux_heap.getmax()
+      aux_heap.extract()
+
+      l = main_heap.left(j)
+      r = main_heap.right(j)
+      if l != None:
+          aux_heap.insert(main_heap.heap[l], l)
+      if r != None:
+          aux_heap.insert(main_heap.heap[r], r)
+
+  (x, j) = aux_heap.getmax()
+  return x
+
+
+# Implementazione MinHeap
+class Maxheap:
+
+  # heap: array di interi che rappresentano i valori dei nodi
+  def __init__(self):
+      self.heap = []
+
+  # RETURN: lunghezza dell'array
+  def len(self):
+      return len(self.heap)
+
+  # RETURN: valore massimo (radice)
+  def getmax(self):
+      assert len(self.heap) > 0
+      return self.heap[0]
+
+  # i indice di un nodo
+  # RETURN: indice del nodo padre
+  # se il nodo in posizione i e' la radice, non fa nulla
+  def parent(self, i):
+      if i == 0:
+          return None
+      return (i + 1) // 2 - 1
+
+  # i indice di un nodo
+  # RETURN: indice del figlio sinistro
+  def left(self, i):
+      j = i * 2 + 1
+      if j >= len(self.heap):
+          return None
+      return j
+
+  # i indice di un nodo
+  # REUTRN: indice del figlio destro
+  def right(self, i):
+      j = i * 2 + 2
+      if j >= len(self.heap):
+          return None
+      return j    
+
+  # estrae il nodo radice dalla heap
+  def extract(self):
+      self.heap[0] = self.heap[-1]
+      self.heap = self.heap[:-1]
+      self.heapify(0)
+
+  # x nodo da inserire
+  # inserisce il nodo nella heap
+  def insert(self, x):
+      self.heap.append(x)
+      self.moveup(len(self.heap) - 1)
+
+  # i indice di un nodo della heap
+  # x nodo da scambiare
+  # scambia il nodo in posizione i nella heap con il nodo x
+  def change(self, i, x):
+      assert i >= 0 and i < len(self.heap)
+      if x > self.heap[i]:
+          self.heap[i] = x
+          self.moveup(i)
+      elif x < self.heap[i]:
+          self.heap[i] = x
+          self.heapify(i)
+
+  # a array di interi
+  # costruisce una maxheap dall'array a 
+  def buildheap(self, a):
+      self.heap = a.copy()
+      for i in range(len(self.heap) - 1, -1, -1):
+          self.heapify(i)
+
+  # i indice del nodo da cui parte la procedura
+  # "sistema" l'albero in modo che il sottoalbero con radice il
+  # nodo in posizione i sia una maxheap
+  def heapify(self, i):
+      l = self.left(i)
+      r = self.right(i)
+      argmax = i
+      if l != None and self.heap[l] > self.heap[argmax]:
+          argmax = l
+      if r != None and self.heap[r] > self.heap[argmax]:
+          argmax = r
+      if i != argmax:
+          self.heap[i], self.heap[argmax] = self.heap[argmax], self.heap[i]
+          self.heapify(argmax)
+
+  # i indice di un nodo
+  # scambia il nodo in posizione i nella heap con il suo genitore
+  # se il nodo in posizione i e' la radice, non fa nulla
+  def moveup(self, i):
+      if i == 0:
+          return
+      p = self.parent(i)
+      if p != None and self.heap[i] > self.heap[p]:
+          self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
+          self.moveup(p)
+
+# Implementazione MinHeap Ausiliaria
+class MaxheapAux:
+
+  # heap: array di interi che rappresentano i valori dei nodi
+  # pos: array di interi che rappresentano le posizioni dei nodi nella heap principale
+  def __init__(self):
+      self.heap = []
+      self.pos = []
+
+  # RETURN: lunghezza dell'array
+  def len(self):
+      return len(self.heap)
+
+  # RETURN: valore massimo (radice)
+  def getmax(self):
+      assert len(self.heap) > 0
+      return (self.heap[0], self.pos[0])
+
+  # i indice di un nodo
+  # RETURN: indice del nodo padre
+  # se il nodo in posizione i e' la radice, non fa nulla
+  def parent(self, i):
+      if i == 0:
+          return None
+      return (i + 1) // 2 - 1
+
+  # i indice di un nodo
+  # RETURN: indice del figlio sinistro
+  def left(self, i):
+      j = i * 2 + 1
+      if j >= len(self.heap):
+          return None
+      return j
+
+  # i indice di un nodo
+  # REUTRN: indice del figlio destro
+  def right(self, i):
+      j = i * 2 + 2
+      if j >= len(self.heap):
+          return None
+      return j    
+
+  # estrae il nodo radice dalla heap
+  def extract(self):
+      self.heap[0] = self.heap[-1]
+      self.pos[0] = self.pos[-1]
+      self.heap = self.heap[:-1]
+      self.pos = self.pos[:-1]
+      self.heapify(0)
+
+  # x nodo da inserire
+  # inserisce il nodo nella heap
+  def insert(self, x, p):
+      self.heap.append(x)
+      self.pos.append(p)
+      self.moveup(len(self.heap) - 1)
+
+  # i indice di un nodo della heap
+  # x nodo da scambiare
+  # scambia il nodo in posizione i nella heap con il nodo x
+  def change(self, i, x):
+      assert i >= 0 and i < len(self.heap)
+      if x > self.heap[i]:
+          self.heap[i] = x
+          self.moveup(i)
+      elif x < self.heap[i]:
+          self.heap[i] = x
+          self.heapify(i)
+
+  # a array di interi
+  # costruisce una minheap dall'array a 
+  def buildheap(self, a):
+      self.heap = a.copy()
+      for i in range(len(self.heap) - 1, -1, -1):
+          self.heapify(i)
+
+  # i indice del nodo da cui parte la procedura
+  # "sistema" l'albero in modo che il sottoalbero con randice il
+  # nodo in posizione i sia una minheap
+  def heapify(self, i):
+      l = self.left(i)
+      r = self.right(i)
+      argmax = i
+      if l != None and self.heap[l] > self.heap[argmax]:
+          argmax = l
+      if r != None and self.heap[r] > self.heap[argmax]:
+          argmax = r
+      if i != argmax:
+          self.heap[i], self.heap[argmax] = self.heap[argmax], self.heap[i]
+          self.pos[i], self.pos[argmax] = self.pos[argmax], self.pos[i]
+          self.heapify(argmax)
+
+  # i indice di un nodo
+  # scambia il nodo in posizione i nella heap con il suo genitore
+  # se il nodo in posizione i e' la radice, non fa nulla
+  def moveup(self, i):
+      if i == 0:
+          return
+      p = self.parent(i)
+      if p != None and self.heap[i] > self.heap[p]:
+          self.heap[i], self.heap[p] = self.heap[p], self.heap[i]
+          self.pos[i], self.pos[p] = self.pos[p], self.pos[i]
+          self.moveup(p)
+
+
 # ^ MEDIANOFMEDIANS ^ #
 
 # a array di interi
 # i indice dell'elemento da trovare
-def median_of_medians_select(a, i):
+def medianofmedians_select(a, i):
   return select2(a, 0, len(a)-1, i)
 
 # a array di interi
@@ -304,7 +543,6 @@ def median_of_medians_select(a, i):
 # r fine dell'array
 # i indice dell'elemento da trovare
 def select2(a,p,r,i):
-  
   while (r-p+1) % 5 != 0:     # ripeto finche' non ho un numero di elementi multiplo di 5
     if r - p != 0:
       for j in range(p, r+1): # metto il minimo in prima posizione
@@ -314,7 +552,7 @@ def select2(a,p,r,i):
       return a[p]
     p = p + 1                 # se i != 1 lavoro sul resto dell'array
     i = i - 1
-             
+
   g = int((r - p + 1) / 5)              # numero dei gruppi da 5 elementi (e' un intero)
   if g == 1:
     array_bubble_sort(a, p, g)
@@ -417,132 +655,218 @@ if __name__=="__main__":
 
     for i in range(iters):
         print(f"\r{i}",end='')
-        # n = i * 100 #prof version
         n = int(nmin * (base ** i))
-        points[i] = (n, benchmark(n, 5*n, randomized_quickselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, quickselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, heapselect, risoluzione, 0.001),
-                        benchmark(n, 5*n, median_of_medians_select, risoluzione, 0.001))
+        points[i] = (n, benchmark(n, n, randomized_quickselect, risoluzione, 0.001),
+                        benchmark(n, n, quickselect, risoluzione, 0.001),
+                        benchmark(n, n, min_heapselect, risoluzione, 0.001),
+                        benchmark(n, n, minmax_heapselect, risoluzione, 0.001),
+                        benchmark(n, n, medianofmedians_select, risoluzione, 0.001))
 
-# Plot (line of best fit)
-xs, ys1, ys2, ys3, ys4 = zip(*points)
+# Plot
+xs, ys1, ys2, ys3, ys4, ys5 = zip(*points)
 nxs = np.array(xs)
 
+# TEMPI DI ESECUZIONE NEL CASO MEDIO
+
+# Randondimized Quickselect
 fig1, ax1 = plt.subplots()
 fig1.suptitle("Tempo di esecuzione Randomized QuickSelect")
-plt.scatter(xs, ys1, color='#A5B592', s=10)
-plt.plot(xs, ys1, color='#A5B592', label='andamento dell\'algoritmo')
+plt.scatter(xs, ys1, color='#A5B592', s=20)
+plt.plot(xs, ys1, color='#A5B592', linewidth=2.5, label='Randomized QuickSelect')
 a1, b1 = np.polyfit(xs, ys1, 1)
 ax1.plot(xs, a1*nxs+b1, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n)') # O(n)
 ax1.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax1.grid(True)
-ax1.legend()
+ax1.legend(loc='upper left')
 
+fig11, ax11 = plt.subplots()
+fig11.suptitle("Tempo di esecuzione Randomized QuickSelect (log)")
+ax11.scatter(xs, ys1, color='#A5B592', s=20)
+ax11.plot(xs, ys1, color='#A5B592', linewidth=2.5, label='Randomized QuickSelect')
+ax11.plot(xs, a1*nxs+b1, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n)') # O(n)
+ax11.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax11.set_xscale("log")
+ax11.set_yscale("log")
+ax11.grid(True)
+ax11.legend(loc='upper left')
+
+# Quickselect
 fig2, ax2 = plt.subplots()
 fig2.suptitle("Tempo di esecuzione QuickSelect")
-plt.scatter(xs, ys2, color='#A23E48', s=10)
-plt.plot(xs, ys2, color='#A23E48', label='andamento dell\'algoritmo')
+plt.scatter(xs, ys2, color='#A23E48' , s=20)
+plt.plot(xs, ys2, color='#A23E48', linewidth=2.5,  label='QuickSelect')
 a2, b2 = np.polyfit(xs, ys2, 1)
 ax2.plot(xs, a2*nxs+b2, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n)') # O(n)
 ax2.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax2.grid(True)
-ax2.legend()
+ax2.legend(loc='upper left')
 
+fig12, ax12 = plt.subplots()
+fig12.suptitle("Tempo di esecuzione QuickSelect (log)")
+plt.scatter(xs, ys2, color='#A23E48', s=20)
+plt.plot(xs, ys2, color='#A23E48', linewidth=2.5, label='QuickSelect')
+ax12.plot(xs, a2*nxs+b2, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n)') # O(n)
+ax12.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax12.set_xscale("log")
+ax12.set_yscale("log")
+ax12.grid(True)
+ax12.legend(loc='upper left')
+
+# Heapselect
 fig3, ax3 = plt.subplots()
 fig3.suptitle("Tempo di esecuzione HeapSelect")
-plt.scatter(xs, ys3, color='#4A6C6F', s=10)
-plt.plot(xs, ys3, color='#4A6C6F', label='andamento dell\'algoritmo')
-coeff3 = np.polyfit(np.log(xs)*xs,ys4,1)
+plt.scatter(xs, ys3, color='#4A6C6F', s=20)
+plt.plot(xs, ys3, color='#4A6C6F', linewidth=2.5, label='HeapSelect')
+coeff3 = np.polyfit(xs+np.log(xs)*xs,ys3,1)
 fit3 = np.poly1d(coeff3)
 ax3.plot(xs, fit3(xs+np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, label='O(n + k logk)') # O(n+klogk)
 ax3.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax3.grid(True)
-ax3.legend( loc='upper left')
+ax3.legend(loc='upper left')
 
+fig13, ax13 = plt.subplots()
+fig13.suptitle("Tempo di esecuzione HeapSelect (log)")
+plt.scatter(xs, ys3, color='#4A6C6F', s=20)
+plt.plot(xs, ys3, color='#4A6C6F', linewidth=2.5, label='HeapSelect')
+ax13.plot(xs, fit3(np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50, label='O(n + k logk)') # O(n+klogk)
+ax13.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax13.set_xscale("log")
+ax13.set_yscale("log")
+ax13.grid(True)
+ax13.legend(loc='upper left')
+
+# Minmax_Heapselect
 fig4, ax4 = plt.subplots()
-fig4.suptitle("Tempo di esecuzione MedianOfMediansSelect")
-plt.scatter(xs, ys4, color='#FFAD0A', s=10)
-plt.plot(xs, ys4, color='#FFAD0A', label='andamento dell\'algoritmo')
-a4, b4 = np.polyfit(xs, ys4, 1)
-ax4.plot(xs, a4*nxs+b4, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n logn)') # O(nlogn)
+fig4.suptitle("Tempo di esecuzione Minmax HeapSelect")
+plt.scatter(xs, ys4, color='#3BB273', s=20)
+plt.plot(xs, ys4, color='#3BB273', linewidth=2.5, label='Minmax_HeapSelect')
+coeff4 = np.polyfit(xs+np.log(xs)*xs,ys4,1)
+fit4 = np.poly1d(coeff4)
+ax4.plot(xs, fit4(xs+np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50 , label='O(n + k logk)') # O(n+klogk)
 ax4.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax4.grid(True)
-ax4.legend()
+ax4.legend(loc='upper left')
 
-comparason1n, ax5 = plt.subplots()
-comparason1n.suptitle("Sovrapposizione dei tempi di esecuzione")
-plt.plot(xs, ys1, color='#A5B592', label='Randomized QuickSelect')
-plt.plot(xs, ys2, color='#A23E48', label='QuickSelect')
-plt.plot(xs, ys3, color='#4A6C6F', label='HeapSelect')
-plt.plot(xs, ys4, color='#FFAD0A', label='MedianOfMedians')
+fig14, ax14 = plt.subplots()
+fig14.suptitle("Tempo di esecuzione Minmax Heapselect (log)")
+plt.scatter(xs, ys4, color='#3BB273', s=20)
+plt.plot(xs, ys4, color='#3BB273', linewidth=2.5, label='Minmax_HeapSelect')
+ax14.plot(xs, fit4(xs+np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50 , label='O(n + k logk)') # O(n+klogk)
+ax14.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax14.set_xscale("log")
+ax14.set_yscale("log")
+ax14.grid(True)
+ax14.legend(loc='upper left')
+
+# Median of medians select 
+fig5, ax5 = plt.subplots()
+fig5.suptitle("Tempo di esecuzione MedianOfMediansSelect")
+plt.scatter(xs, ys5, color='#FFAD0A', s=20)
+plt.plot(xs, ys5, color='#FFAD0A', linewidth=2.5, label='MedianOfMediansSelect')
+a5, b5 = np.polyfit(xs, ys5, 1)
+ax5.plot(xs, a5*nxs+b5, color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50, label='O(n)') # O(n)
 ax5.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax5.grid(True)
-ax5.legend()
+ax5.legend(loc='upper left')
 
-#plt.show()
-#plt.close()
+fig15, ax15 = plt.subplots()
+fig15.suptitle("Tempo di esecuzione MedianOfMediansSelect (log)")
+plt.scatter(xs, ys5, color='#FFAD0A', s=20)
+plt.plot(xs, ys5, color='#FFAD0A', linewidth=2.5, label='MedianOfMediansSelect')
+ax15.plot(xs, a5*nxs+b5, color='#404040', linestyle='dashed', linewidth=2.5, alpha=0.50, label='O(n)') # O(n)
+ax15.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax15.set_xscale("log")
+ax15.set_yscale("log")
+ax15.grid(True)
+ax15.legend(loc='upper left')
 
-# Scala logaritmica
-fig1, ax1 = plt.subplots()
-fig1.suptitle("Tempo di esecuzione Randomized QuickSelect")
-plt.plot(xs, ys1, color='#A5B592', label='andamento dell\'algoritmo')
-plt.scatter(xs, ys1, color='#A5B592', s=10)
-a1, b1 = np.polyfit(xs, ys1, 1)
-ax1.plot(xs, a1*nxs+b1, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n)') # O(n)
-ax1.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
-plt.xscale('log')
-plt.yscale('log')
-ax1.grid(True)
-ax1.legend()
+# GRAFICO COMPLETO
+fig6, ax6 = plt.subplots()
+fig6.suptitle("Grafico di comparazione")
 
-fig2, ax2 = plt.subplots()
-fig2.suptitle("Tempo di esecuzione QuickSelect")
-plt.plot(xs, ys2, color='#A23E48', label='andamento dell\'algoritmo')
-plt.scatter(xs, ys2, color='#A23E48', s=10)
-a2, b2 = np.polyfit(xs, ys2, 1)
-ax2.plot(xs, a2*nxs+b2, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n)') # O(n)
-ax2.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
-plt.xscale('log')
-plt.yscale('log')
-ax2.grid(True)
-ax2.legend()
+plt.scatter(xs, ys1, color='#A5B592', label='Randomized QuickSelect', s=20)
+ax6.plot(xs, ys1, color='#A5B592', linewidth=2.5)
 
-fig3, ax3 = plt.subplots()
-fig3.suptitle("Tempo di esecuzione HeapSelect")
-plt.scatter(xs, ys3, color='#4A6C6F', s=10)
-plt.plot(xs, ys3, color='#4A6C6F', label='andamento dell\'algoritmo')
-coeff3 = np.polyfit(np.log(xs)*xs,ys4,1)
-fit3 = np.poly1d(coeff3)
-ax3.plot(xs, fit3(xs+np.log(xs)*xs), color='#404040', linestyle='dashed', linewidth=2.5, label='O(n + k logk)') # O(n+klogk)
-ax3.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
-plt.xscale('log')
-plt.yscale('log')
-ax3.grid(True)
-ax3.legend()
+plt.scatter(xs, ys4, color='#3BB273',label='Minmax_HeapSelect', s=20)
+ax6.plot(xs, ys4, color='#3BB273', linewidth=2.5)
 
-fig4, ax4 = plt.subplots()
-fig4.suptitle("Tempo di esecuzione MedianOfMediansSelect")
-plt.scatter(xs, ys4, color='#FFAD0A', s=10)
-plt.plot(xs, ys4, color='#FFAD0A', label='andamento dell\'algoritmo')
-a4, b4 = np.polyfit(xs, ys4, 1)
-ax4.plot(xs, a4*nxs+b4, color='#404040', linestyle='dashed', linewidth=2.5, label='O(n logn)') # O(nlogn)
-ax4.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
-plt.xscale('log')
-plt.yscale('log')
-ax4.grid(True)
-ax4.legend()
+#plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
+# ax6.plot(xs, ys3, color='#4A6C6F', linewidth=2.5)
 
-comparason1log, ax5 = plt.subplots()
-comparason1n.suptitle("Sovrapposizione dei tempi di esecuzione")
-plt.plot(xs, ys1, color='#A5B592', label='Randomized QuickSelect')
-plt.plot(xs, ys2, color='#A23E48', label='QuickSelect')
-plt.plot(xs, ys3, color='#4A6C6F', label='HeapSelect')
-plt.plot(xs, ys4, color='#FFAD0A', label='MedianOfMedians')
-ax5.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
-plt.xscale('log')
-plt.yscale('log')
-ax5.grid(True)
-ax5.legend()
+plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=20)
+ax6.plot(xs, ys5, color='#FFAD0A', linewidth=2.5)
+
+ax6.set(xlabel='Dimensione dell\'input', ylabel='Tempo medio di esecuzione (secondi)')
+ax6.grid(True)
+ax6.legend(loc='upper left')
+
+
+fig16, ax16 = plt.subplots()
+fig16.suptitle("Grafico di comparazione (log)")
+
+plt.scatter(xs, ys1, color='#A5B592', label='Randomized QuickSelect', s=20)
+ax16.plot(xs, ys1, color='#A5B592', linewidth=2.5)
+
+plt.scatter(xs, ys4, color='#3BB273', label='Minmax_HeapSelect', s=20)
+ax16.plot(xs, ys4, color='#3BB273', linewidth=2.5)
+
+#plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
+#ax16.plot(xs, ys3, color='#4A6C6F', linewidth=2.5)
+
+plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=20)
+ax16.plot(xs, ys5, color='#FFAD0A', linewidth=2.5)
+
+ax16.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax16.set_xscale("log")
+ax16.set_yscale("log")
+ax16.grid(True)
+ax16.legend(loc='upper left')
+
+# GRAFICO QUICKSELECT E RANDOMIZED QUICKSELECT
+fig7, ax7 = plt.subplots()
+fig7.suptitle("Comparazione tempo di esecuzione QuickSelect e Randomized QuickSelect")
+plt.scatter(xs, ys2, color='#A5B592')
+plt.scatter(xs, ys1, color='#A23E48')
+ax7.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5, label='QuickSelect')
+ax7.plot(xs, ys1, color='#A23E48', linestyle='-', linewidth=2.5, label='Randomized QuickSelect')
+ax7.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax7.grid(True)
+ax7.legend(loc='upper left')
+
+fig17, ax17 = plt.subplots()
+fig17.suptitle("Comparazione tempo di esecuzione QuickSelect e Randomized QuickSelect (log)")
+plt.scatter(xs, ys2, color='#A5B592')
+plt.scatter(xs, ys1, color='#A23E48')
+ax17.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5, label='QuickSelect')
+ax17.plot(xs, ys1, color='#A23E48', linestyle='-', linewidth=2.5, label='Randomized QuickSelect')
+ax17.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax17.set_xscale("log")
+ax17.set_yscale("log")
+ax17.grid(True)
+ax17.legend(loc='upper left')
+
+# GRAFICO HEAPSELECT E VARIANTE
+fig8, ax8 = plt.subplots()
+fig8.suptitle("Comparazione Heapselect con variante")
+plt.scatter(xs, ys3, color='#4A6C6F', s=20)
+plt.scatter(xs, ys4, color='#3BB273', s=20)
+ax8.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5, label='HeapSelect')
+ax8.plot(xs, ys4, color='#3BB273', linestyle='-', linewidth=2.5,  label='Minmax HeapSelect')
+ax8.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax8.grid(True)
+ax8.legend(loc='upper left')
+
+fig18, ax18 = plt.subplots()
+fig18.suptitle("Comparazione Heapselect con variante (log)")
+plt.scatter(xs, ys3, color='#4A6C6F', s=20)
+plt.scatter(xs, ys4, color='#3BB273', s=20)
+ax18.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5, label='HeapSelect')
+ax18.plot(xs, ys4, color='#3BB273', linestyle='-', linewidth=2.5,  label='Minmax HeapSelect')
+ax18.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax18.set_xscale("log")
+ax18.set_yscale("log")
+ax18.grid(True)
+ax18.legend(loc='upper left')
 
 plt.show()
 plt.close()
