@@ -791,30 +791,36 @@ ax20.legend(loc='upper left')
 fig6, ax6 = plt.subplots()
 fig6.suptitle("Grafico di comparazione")
 
-plt.scatter(xs, ys2, color='#A5B592', label='Randomized QuickSelect', s=20)
-ax6.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5)
+plt.scatter(xs, ys1, color='#A5B592', label='Randomized QuickSelect', s=20)
+ax6.plot(xs, ys1, color='#A5B592', linewidth=2.5)
 
-plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
-ax6.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5)
+plt.scatter(xs, ys4, color='#3BB273',label='Minmax_HeapSelect', s=20)
+ax6.plot(xs, ys4, color='#3BB273', linewidth=2.5)
+
+#plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
+# ax6.plot(xs, ys3, color='#4A6C6F', linewidth=2.5)
 
 plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=20)
-ax6.plot(xs, ys5, color='#FFAD0A', linestyle='-', linewidth=2.5)
+ax6.plot(xs, ys5, color='#FFAD0A', linewidth=2.5)
 
-ax6.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
+ax6.set(xlabel='Dimensione dell\'input', ylabel='Tempo medio di esecuzione (secondi)')
 ax6.grid(True)
 ax6.legend(loc='upper left')
 
 
 fig16, ax16 = plt.subplots()
 fig16.suptitle("Grafico di comparazione (log)")
-plt.scatter(xs, ys2, color='#A5B592', label='Randomized QuickSelect', s=20)
-ax16.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5)
+plt.scatter(xs, ys1, color='#A5B592', label='Randomized QuickSelect', s=20)
+ax16.plot(xs, ys1, color='#A5B592', linewidth=2.5)
 
-plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
-ax16.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5)
+plt.scatter(xs, ys4, color='#3BB273', label='Minmax_HeapSelect', s=20)
+ax16.plot(xs, ys4, color='#3BB273', linewidth=2.5)
+
+#plt.scatter(xs, ys3, color='#4A6C6F', label='HeapSelect', s=20)
+#ax16.plot(xs, ys3, color='#4A6C6F', linewidth=2.5)
 
 plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=20)
-ax16.plot(xs, ys5, color='#FFAD0A', linestyle='-', linewidth=2.5)
+ax16.plot(xs, ys5, color='#FFAD0A', linewidth=2.5)
 
 ax16.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
 ax16.set_xscale("log")
@@ -833,6 +839,18 @@ ax7.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (
 ax7.grid(True)
 ax7.legend(loc='upper left')
 
+fig17, ax17 = plt.subplots()
+fig17.suptitle("Comparazione tempo di esecuzione QuickSelect e Randomized QuickSelect (log)")
+plt.scatter(xs, ys2, color='#A5B592')
+plt.scatter(xs, ys1, color='#A23E48')
+ax17.plot(xs, ys2, color='#A5B592', linestyle='-', linewidth=2.5, label='QuickSelect')
+ax17.plot(xs, ys1, color='#A23E48', linestyle='-', linewidth=2.5, label='Randomized QuickSelect')
+ax17.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax17.set_xscale("log")
+ax17.set_yscale("log")
+ax17.grid(True)
+ax17.legend(loc='upper left')
+
 # GRAFICO HEAPSELECT E VARIANTE
 fig8, ax8 = plt.subplots()
 fig8.suptitle("Comparazione Heapselect con variante")
@@ -843,6 +861,18 @@ ax8.plot(xs, ys4, color='#3BB273', linestyle='-', linewidth=2.5,  label='Minmax 
 ax8.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax8.grid(True)
 ax8.legend(loc='upper left')
+
+fig18, ax18 = plt.subplots()
+fig18.suptitle("Comparazione Heapselect con variante (log)")
+plt.scatter(xs, ys3, color='#4A6C6F', s=20)
+plt.scatter(xs, ys4, color='#3BB273', s=20)
+ax18.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5, label='HeapSelect')
+ax18.plot(xs, ys4, color='#3BB273', linestyle='-', linewidth=2.5,  label='Minmax HeapSelect')
+ax18.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax18.set_xscale("log")
+ax18.set_yscale("log")
+ax18.grid(True)
+ax18.legend(loc='upper left')
 
 plt.show()
 plt.close()
