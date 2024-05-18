@@ -133,3 +133,51 @@ caso medio -> meglio minmax heapselect
 caso peggiore -> - simili per array ordinato e k = 1
                  - molto meglio minmax per array ordinato e k = len(a) 
 					         (si riconduce al caso semplice di maxheapselect)
+
+
+
+ # ^ CASO PESSIMO DI MEDIAN OF MEDIANS ^
+
+Funzione che genera un array per il caso "quasi pessimo" di median of medians select:
+	l'array e' generato in modo che alla prima iterazione l'algoritmo venga richiamato
+ 	su 7/10 dell'array. Tuttavia questo vale solamente per la prima iterazione.
+
+	def genera_input_mofm(n):
+	    a = [0] * n
+	    g = len(a) // 5
+	    r = len(a) % 5
+	    for _ in range(r):
+	        a[r] = 0
+	    for i in range(r,n):
+	        if i % g >= -(-g//2):
+	            a[i] = len(a) + i
+	        else:
+	            a[i] = i
+	    return a 
+
+
+Teoricamente l'algoritmo nel caso pessimo verrebbe richiamato a ogni iterazione su 7/10
+dell'array. In pratica questo però non accade perché il partition tende a "sistemare"
+l'array in modo che la prossima chiamata ricada su un caso piu' favorevole
+ 
+ --- RISPOSTA DI CHAT GPT ---
+
+Analisi Ricorsiva
+
+La selezione del pivot divide l'array in tre parti, una delle quali contiene al massimo il 
+70% degli elementi originali, il che garantisce un progresso lineare.
+
+Caso Peggiore Pratico
+
+Il caso peggiore si verifica quando la riduzione dell'array non è uniforme e l'elemento 
+cercato è sempre nella parte più grande della suddivisione. Tuttavia, anche in questo 
+scenario, il comportamento dell'algoritmo median of medians garantisce che ogni passo 
+riduca significativamente il problema.
+
+Conclusione
+
+Anche nei casi peggiori teorici, l'algoritmo median of medians select riduce progressivamente 
+la dimensione del problema ad ogni passo, assicurando che il tempo totale rimanga lineare. 
+Quindi, nonostante possiamo costruire un caso dove sembra che il partizionamento sia 
+sfavorevole, l'algoritmo è progettato per mantenere O(n) tempo di esecuzione grazie alla 
+scelta robusta del pivot.
