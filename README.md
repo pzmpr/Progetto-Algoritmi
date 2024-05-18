@@ -155,6 +155,7 @@ Funzione che genera un array per il caso "quasi pessimo" di median of medians se
 	            a[i] = i
 	    return a 
 
+L'algoritmo eseguito con questa funzione impiega tempi simili all'esecuzione con input randomico (caso medio) e tempi peggiori rispetto all'esecuzione con array ordinato
 
 Teoricamente l'algoritmo nel caso pessimo verrebbe richiamato a ogni iterazione su 7/10
 dell'array. In pratica questo però non accade perché il partition tende a "sistemare"
