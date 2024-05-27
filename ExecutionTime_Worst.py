@@ -84,9 +84,9 @@ def randomized_partition(a, low, high):
 # in base al valore di k viene scelta la procedura con minheap o maxheap
 def minmax_heapselect(a, k):
     if k > len(a)//2:
-        max_heapselect(a, k)
+        return max_heapselect(a, k)
     else:
-        min_heapselect(a, k)
+        return min_heapselect(a, k)
 
 # a: array
 # k: indice dell'elemento da trovare
