@@ -7,9 +7,9 @@
 # in base al valore di k viene scelta la procedura con minheap o maxheap
 def heapselect(a, k):
     if k > len(a)//2:
-        max_heapselect(a, k)
+        return max_heapselect(a, k)
     else:
-        min_heapselect(a, k)
+        return min_heapselect(a, k)
 
 
 # ^ MIN_HEAPSELECT ^
