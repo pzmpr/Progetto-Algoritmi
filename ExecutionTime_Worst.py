@@ -625,8 +625,7 @@ def partition(a, p, r):
 # ^ TEMPI DI ESECUZIONE ^
 
 # n:    numero di interi da generare
-# maxv: valore massimo che puo' assumere un elemento dell'array
-# genera array di dimensione n con interi compresi nell'intervallo [0, maxv] 
+# genera array di dimensione n con interi compresi nell'intervallo [0, n-1] in ordine crescente 
 def genera_input(n):
     a = [0] * n
     for i in range(n):
@@ -642,12 +641,12 @@ def resolution():
     return stop - start
 
 # n:             dimensione degli array
-# maxv:          valore massimo che puo' assumere un elemento dell'array
+# k:             indice dell'elemento da trovare nell'array
 # func:          funzione
 # risoluzione:   risoluzione del clock
 # max_rel_error: massimo errore relativo
 # RETURN: tempo medio dell'esecuzione per una singola istanza 
-def benchmark(n, maxv, k, func, risoluzione, max_rel_error=0.001):
+def benchmark(n, k, func, risoluzione, max_rel_error=0.001):
     tmin = risoluzione * ( 1 + ( 1 / max_rel_error ) )
     count = 0
     start = time.perf_counter()
@@ -673,11 +672,11 @@ if __name__=="__main__":
     for i in range(iters):
         print(f"\r{i}",end='')
         n = int(nmin * (base ** i))
-        points[i] = (n, benchmark(n, n, 1, randomized_quickselect, risoluzione, 0.001),
-                        benchmark(n, n, 1, quickselect, risoluzione, 0.001),
-                        benchmark(n, n, 0, min_heapselect, risoluzione, 0.001),
-                        benchmark(n, n, 0, minmax_heapselect, risoluzione, 0.001),
-                        benchmark(n, n, 0, median_of_medians_select, risoluzione, 0.001))
+        points[i] = (n, benchmark(n, 1, randomized_quickselect, risoluzione, 0.001),
+                        benchmark(n, 1, quickselect, risoluzione, 0.001),
+                        benchmark(n, 0, min_heapselect, risoluzione, 0.001),
+                        benchmark(n, 0, minmax_heapselect, risoluzione, 0.001),
+                        benchmark(n, 0, median_of_medians_select, risoluzione, 0.001))
 
 # Plot
 xs, ys1, ys2, ys3, ys4, ys5= zip(*points)
