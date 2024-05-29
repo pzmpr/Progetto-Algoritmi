@@ -808,7 +808,7 @@ ax6.plot(xs, ys3, color='#4A6C6F', linestyle='-', linewidth=2.5)
 
 plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=20)
 ax6.plot(xs, ys5, color='#FFAD0A', linestyle='-', linewidth=2.5)
-ax6.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax6.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax6.grid(True)
 ax6.legend(loc='upper left')
 
@@ -841,7 +841,7 @@ ax7.plot(xs, ys4, color='#3BB273', linestyle='-', linewidth=2.5)
 
 plt.scatter(xs, ys5, color='#FFAD0A', label='MedianodMediansSelect', s=20)
 ax7.plot(xs, ys5, color='#FFAD0A', linestyle='-', linewidth=2.5)
-ax7.set(xlabel='Dimensione dell\'input (log)', ylabel='Tempo medio di esecuzione (secondi)')
+ax7.set(xlabel='Dimensione dell\'input (n)', ylabel='Tempo medio di esecuzione (secondi)')
 ax7.grid(True)
 ax7.legend(loc='upper left')
 
